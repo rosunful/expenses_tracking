@@ -1,4 +1,5 @@
 import 'package:expense_tracking/screens/landing_page.dart';
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/widgets/onboard_pages/container1.dart';
 import 'package:expense_tracking/widgets/onboard_pages/container2.dart';
 import 'package:expense_tracking/widgets/onboard_pages/container3.dart';
@@ -23,17 +24,28 @@ class _StartingOnboard extends State<StartingOnboard> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
 
-        systemNavigationBarColor: Color(0xFF0E1A14),
-        systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarDividerColor: Colors.transparent,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      // value: const SystemUiOverlayStyle(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+
+        //THE REASON I AM DOING THIS CAUSE THE SYS_NAV IS SHOWING FULL DARK
+        //WHICH LEADING TO NOTHING TO SEE
+        // statusBarColor: Colors.transparent,
+        // statusBarIconBrightness: Brightness.light,
+        // statusBarBrightness: Brightness.dark,
+
+        // systemNavigationBarColor: Color(0xFF0E1A14),
+        // systemNavigationBarIconBrightness: Brightness.light,
+        // systemNavigationBarDividerColor: Colors.transparent,
       ),
       child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsetsGeometry.fromLTRB(20, 10, 20, 30),
@@ -53,9 +65,13 @@ class _StartingOnboard extends State<StartingOnboard> {
                       onPressed: () {
                         _control.jumpToPage(4);
                       },
-                      child: const Text(
+                      child: Text(
                         "Skip",
-                        style: TextStyle(color: Colors.white70),
+                        style: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).extension<AppColors>()!.skipText,
+                        ),
                       ),
                     ),
                   ],
@@ -97,7 +113,7 @@ class _StartingOnboard extends State<StartingOnboard> {
                       radius:
                           16, // corner rounding — high value = fully pill-shaped
                       activeDotColor: const Color(0xFF3DDC97),
-                      dotColor: Colors.white24,
+                      dotColor:Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -128,8 +144,10 @@ class _StartingOnboard extends State<StartingOnboard> {
                       if (_currentPage > 0) ...[
                         TextButton(
                           style: TextButton.styleFrom(
-                            backgroundColor: const Color(0xFF17291F),
-                            foregroundColor: Colors.white,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).extension<AppColors>()!.balanceCardBackground,
+                            foregroundColor: context.appColors.balanceCardText,
                           ),
                           onPressed: () {
                             _control.previousPage(
@@ -142,7 +160,7 @@ class _StartingOnboard extends State<StartingOnboard> {
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w900,
-                              color: const Color.fromARGB(199, 255, 255, 255),
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                           ),
                         ),

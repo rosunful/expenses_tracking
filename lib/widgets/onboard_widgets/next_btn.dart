@@ -16,7 +16,7 @@ class NextButton extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF34D399),
+          backgroundColor:Theme.of(context).colorScheme.surface,
           padding: EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
@@ -24,7 +24,7 @@ class NextButton extends StatelessWidget {
         ),
         onPressed: onNext,
         child: Text(currentPage == 4 ? "Get Started" : "Next", 
-        style: GoogleFonts.inter(color: Colors.black , 
+        style: GoogleFonts.inter(color:Theme.of(context).colorScheme.onSurface, 
         fontWeight: FontWeight.w700),),
       ),
     );

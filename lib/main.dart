@@ -1,7 +1,7 @@
 import 'package:expense_tracking/screens/starting_onboard.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/theme/app_theme_notifier.dart';
-import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottomNavBar.dart';
+import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

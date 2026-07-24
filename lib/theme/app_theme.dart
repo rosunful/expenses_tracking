@@ -14,8 +14,8 @@ class AppTheme {
       primary: _accentGreen,
       secondary: _accentGreen,
       surface: Colors.white,
+      //THIS HAS BEEN THE COLOR OF THE TEXT LIKE USERNAME
       onSurface: Color(0xFF1A1A1A),
-      background: Color(0xFFF5F6F8),
     ),
     cardColor: Colors.white,
     cardTheme: CardThemeData(
@@ -31,24 +31,25 @@ class AppTheme {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: _accentGreen,
-      unselectedItemColor: Color(0xFFB0B4B9),
+      unselectedItemColor: Color(0xFF75857C),
     ),
     extensions: const [
       AppColors(
-      balanceCardBackground: Color(0xFF1B5E4A),
-      balanceCardText: Colors.white,
-      balanceCardSubtext: Color(0xCCFFFFFF),
-      incomeText: _incomeGreen,
-      expenseText: _expenseRed,
-      progressTrack: Color(0xFFE4E6E9),
-      toggleBackground: Color(0xFFEDEEF0),
-      card: Colors.white,
-      verticalLine: Color(0xFFB8E6D1),
-      verticalLongerLine: _accentGreen,
-      navBarBackground: Colors.white,
-      activeIcon: _accentGreen,
-      inactiveIcon: Color(0xFFB0B4B9),
-      fabColor: _accentGreen,
+        balanceCardBackground: Color(0xFF1B5E4A),
+        balanceCardText: Colors.white,
+        balanceCardSubtext: Color(0xCCFFFFFF),
+        incomeText: _incomeGreen,
+        expenseText: _expenseRed,
+        progressTrack: Color(0xFFE4E6E9),
+        toggleBackground: Color(0xFFEDEEF0),
+        card: Colors.white,
+        verticalLine: Color(0xFFB8E6D1),
+        verticalLongerLine: _accentGreen,
+        navBarBackground: Colors.white,
+        activeIcon: _accentGreen,
+        inactiveIcon: Color(0xFFB0B4B9),
+        fabColor: _accentGreen,
+        skipText: Color.fromARGB(255, 62, 69, 66),
       ),
     ],
   );
@@ -62,7 +63,6 @@ class AppTheme {
       secondary: _accentGreen,
       surface: Color(0xFF1A1C1E),
       onSurface: Color(0xFFF5F5F5),
-      background: Color(0xFF0E0F10),
     ),
     cardColor: const Color(0xFF1A1C1E),
     cardTheme: CardThemeData(
@@ -82,84 +82,27 @@ class AppTheme {
     ),
     extensions: const [
       AppColors(
-      balanceCardBackground: Color(0xFF1FE0A3),
-      balanceCardText: Color(0xFF0E0F10),
-      balanceCardSubtext: Color(0xFF13473A),
-      incomeText: Color(0xFF3EE6A8),
-      expenseText: Color(0xFFFF6B6B),
-      progressTrack: Color(0xFF2A2D30),
-      toggleBackground: Color(0xFF1A1C1E),
-      card: Color(0xFF1A1C1E),
-      verticalLine: Color(0xFF2D5C4A),
-      verticalLongerLine: Color(0xFF3EE6A8),
-      navBarBackground: Color(0xFF11241C),
-      activeIcon: Color(0xFF34D399),
-      inactiveIcon: Color(0xFF5C6066),
-      fabColor: Color(0xFF34D399),
+        balanceCardBackground: Color(0xFF1FE0A3),
+        balanceCardText: Color(0xFF0E0F10),
+        balanceCardSubtext: Color(0xFF13473A),
+        incomeText: Color(0xFF3EE6A8),
+        expenseText: Color(0xFFFF6B6B),
+        progressTrack: Color(0xFF2A2D30),
+        toggleBackground: Color(0xFF1A1C1E),
+        card: Color(0xFF1A1C1E),
+        verticalLine: Color(0xFF2D5C4A),
+        verticalLongerLine: Color(0xFF3EE6A8),
+        navBarBackground: Color(0xFF11241C),
+        activeIcon: Color(0xFF34D399),
+        inactiveIcon: Color(0xFF5C6066),
+        fabColor: Color(0xFF34D399),
+        skipText: Color.fromARGB(255, 171, 175, 173),
       ),
     ],
   );
 }
 
-
 /////////////APP COLOR PART////////////////
-
-
-// class AppColors extends ThemeExtension<AppColors> {
-//   final Color balanceCardBackground;
-//   final Color balanceCardText;
-//   final Color balanceCardSubtext;
-//   final Color incomeText;
-//   final Color expenseText;
-//   final Color progressTrack;
-//   final Color toggleBackground;
-
-//   const AppColors({
-//     required this.balanceCardBackground,
-//     required this.balanceCardText,
-//     required this.balanceCardSubtext,
-//     required this.incomeText,
-//     required this.expenseText,
-//     required this.progressTrack,
-//     required this.toggleBackground,
-//   });
-
-//   @override
-//   AppColors copyWith({
-//     Color? balanceCardBackground,
-//     Color? balanceCardText,
-//     Color? balanceCardSubtext,
-//     Color? incomeText,
-//     Color? expenseText,
-//     Color? progressTrack,
-//     Color? toggleBackground,
-//   }) {
-//     return AppColors(
-//       balanceCardBackground: balanceCardBackground ?? this.balanceCardBackground,
-//       balanceCardText: balanceCardText ?? this.balanceCardText,
-//       balanceCardSubtext: balanceCardSubtext ?? this.balanceCardSubtext,
-//       incomeText: incomeText ?? this.incomeText,
-//       expenseText: expenseText ?? this.expenseText,
-//       progressTrack: progressTrack ?? this.progressTrack,
-//       toggleBackground: toggleBackground ?? this.toggleBackground,
-//     );
-//   }
-
-//   @override
-//   AppColors lerp(ThemeExtension<AppColors>? other, double t) {
-//     if (other is! AppColors) return this;
-//     return AppColors(
-//       balanceCardBackground: Color.lerp(balanceCardBackground, other.balanceCardBackground, t)!,
-//       balanceCardText: Color.lerp(balanceCardText, other.balanceCardText, t)!,
-//       balanceCardSubtext: Color.lerp(balanceCardSubtext, other.balanceCardSubtext, t)!,
-//       incomeText: Color.lerp(incomeText, other.incomeText, t)!,
-//       expenseText: Color.lerp(expenseText, other.expenseText, t)!,
-//       progressTrack: Color.lerp(progressTrack, other.progressTrack, t)!,
-//       toggleBackground: Color.lerp(toggleBackground, other.toggleBackground, t)!,
-//     );
-//   }
-// }
-
 
 class AppColors extends ThemeExtension<AppColors> {
   final Color balanceCardBackground;
@@ -170,7 +113,6 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color progressTrack;
   final Color toggleBackground;
 
-  // 👇 new fields
   final Color card;
   final Color verticalLine;
   final Color verticalLongerLine;
@@ -178,6 +120,10 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color activeIcon;
   final Color inactiveIcon;
   final Color fabColor;
+
+  //THIS IS COLOR ADDED FOR TEXT
+  //FOR THE SKIP TEXT
+  final Color skipText;
 
   const AppColors({
     required this.balanceCardBackground,
@@ -194,6 +140,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.activeIcon,
     required this.inactiveIcon,
     required this.fabColor,
+    required this.skipText,
   });
 
   @override
@@ -212,6 +159,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? activeIcon,
     Color? inactiveIcon,
     Color? fabColor,
+    Color? skipText,
   }) {
     return AppColors(
       balanceCardBackground: balanceCardBackground ?? this.balanceCardBackground,
@@ -228,6 +176,7 @@ class AppColors extends ThemeExtension<AppColors> {
       activeIcon: activeIcon ?? this.activeIcon,
       inactiveIcon: inactiveIcon ?? this.inactiveIcon,
       fabColor: fabColor ?? this.fabColor,
+      skipText: skipText ?? this.skipText,
     );
   }
 
@@ -249,6 +198,7 @@ class AppColors extends ThemeExtension<AppColors> {
       activeIcon: Color.lerp(activeIcon, other.activeIcon, t)!,
       inactiveIcon: Color.lerp(inactiveIcon, other.inactiveIcon, t)!,
       fabColor: Color.lerp(fabColor, other.fabColor, t)!,
+      skipText: Color.lerp(skipText, other.skipText, t)!,
     );
   }
 }
@@ -256,4 +206,9 @@ class AppColors extends ThemeExtension<AppColors> {
 // Handy shortcut extension
 extension AppColorsX on BuildContext {
   AppColors get appColors => Theme.of(this).extension<AppColors>()!;
+}
+
+//Handy shortcut extension for themedata (textTheme+colorScheme+card)
+extension ThemeX on BuildContext {
+  TextTheme get textTheme => Theme.of(this).textTheme;
 }

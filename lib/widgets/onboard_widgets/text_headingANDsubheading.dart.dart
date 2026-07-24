@@ -1,3 +1,4 @@
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,7 +15,7 @@ class HeadingText extends StatelessWidget {
       style: GoogleFonts.inter(
         fontSize: 24,
         fontWeight: FontWeight.w600,
-        color: const Color.fromARGB(211, 255, 255, 255),
+        color:Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -36,7 +37,7 @@ class SubHeading extends StatelessWidget {
         subHeading,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: Colors.white.withValues(alpha: 0.5),
+          color:context.textTheme.bodyMedium?.color,
         )
       ),
     );

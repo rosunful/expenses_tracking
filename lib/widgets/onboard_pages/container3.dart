@@ -34,9 +34,9 @@ class Container3 extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: Color.fromARGB(214, 61, 220, 151),
-                          width: 2.0,
+                          width: 1.5,
                           style: BorderStyle.solid,
-                          strokeAlign: BorderSide.strokeAlignCenter,
+                          strokeAlign: BorderSide.strokeAlignOutside,
                         ),
                       ),
                       child: Center(
@@ -46,11 +46,7 @@ class Container3 extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: Color.fromARGB(203, 61, 220, 151),
                             shape: BoxShape.circle,
-                            border: Border.all(                              
-                              width: 0.6,
-                              style: BorderStyle.solid,
-                              strokeAlign: BorderSide.strokeAlignCenter,
-                            ),
+                            
                           ),
                         ),
                       ),

@@ -36,7 +36,7 @@ class Container2 extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color:Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -44,7 +44,7 @@ class Container2 extends StatelessWidget {
                     "used",
                     style: GoogleFonts.inter(
                       fontSize: 10,
-                      color: Colors.white.withValues(alpha: 0.5),
+                      color:Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],

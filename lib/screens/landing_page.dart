@@ -3,9 +3,8 @@ import 'package:expense_tracking/screens/analytics_screen.dart';
 import 'package:expense_tracking/screens/home_screen.dart';
 import 'package:expense_tracking/screens/profile_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
-import 'package:expense_tracking/theme/app_theme_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottomNavBar.dart';
+import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
@@ -27,21 +26,9 @@ class _LandingPage extends State<LandingPage> {
   Widget build(BuildContext context) {
     final vm = context.watch<BottomNav>();
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Container(
-            height: 40,
-            width: double.infinity,
-            child: Switch(
-              value: context.watch<ThemeNotifier>().themeMode == ThemeMode.dark,
-              onChanged: (_) => context.read<ThemeNotifier>().toggleTheme(),
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: IndexedStack(
-          // preserves each tab's state — you already use this pattern
+          // preserves each tab's state 
           index: vm.selectedIndex,
           children: _pages,
         ),
@@ -53,9 +40,15 @@ class _LandingPage extends State<LandingPage> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: context.appColors.fabColor,
+          border: Border.all(
+            width: 2,
+            color: context.appColors.navBarBackground,
+            style: BorderStyle.solid
+          ),
+         
         ),
         child: IconButton(
-          icon: Icon(Icons.add, color: Colors.black, size: 28),
+          icon: Icon(Icons.add, color:Theme.of(context).bottomNavigationBarTheme.backgroundColor, size: 28),
           onPressed: () {
             // open add expense/income bottom sheet
           },
