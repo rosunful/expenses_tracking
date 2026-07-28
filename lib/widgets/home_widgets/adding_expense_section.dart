@@ -13,27 +13,53 @@ class _AddingExpenseSection extends State<AddingExpenseSection> {
     return Row(
       children: [
         Container(
-          color: Colors.blueGrey,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 225, 225, 225),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Center(child: Icon(Icons.do_not_disturb_on_sharp)),
-                Text("Add Expenses"),
-              ],
+            padding: const EdgeInsets.all(6.0),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Icon(Icons.do_disturb_on_outlined)),
+                  Text(
+                    "Add \n Expense",
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         SizedBox(width: 8),
-        Container(
-          color: Colors.blueGrey,
+       Container(
+          decoration: BoxDecoration(
+           color: const Color.fromARGB(255, 225, 225, 225),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Center(child: Icon(Icons.add)),
-                Text("Add Income"),
-              ],
+            padding: const EdgeInsets.all(6.0),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Icon(Icons.add_circle_outline_rounded)),
+                  Text(
+                    "Add \n Income",
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

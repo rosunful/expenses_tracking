@@ -1,7 +1,7 @@
 import 'package:expense_tracking/theme/app_theme_notifier.dart';
 import 'package:expense_tracking/widgets/home_widgets/adding_expense_section.dart';
-import 'package:expense_tracking/widgets/home_widgets/emergency_fund_section.dart';
-import 'package:expense_tracking/widgets/home_widgets/funding_goal_section.dart';
+import 'package:expense_tracking/widgets/home_widgets/budget_progressbar_section.dart';
+import 'package:expense_tracking/widgets/home_widgets/emergency_funding_goal_section.dart';
 import 'package:expense_tracking/widgets/home_widgets/header_section.dart';
 import 'package:expense_tracking/widgets/home_widgets/hero_section.dart';
 import 'package:expense_tracking/widgets/home_widgets/transaction_history_section.dart';
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                 AddingExpenseSection(),
 
                 //THIS IS THE AREA OF THE EMERGENCY FUND GOAL
-                EmergencyFundSection(),
+                BudgetProgressbarSection(),
 
                 //THIS IS THE FUNDING GOAL + SEE ALL TRANCTION HISTORY BUTTON
                 FundingGoalSection(),
@@ -46,6 +46,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+   
+   
+   
+   
     );
   }
 }

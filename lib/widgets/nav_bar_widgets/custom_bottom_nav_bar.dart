@@ -20,6 +20,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     //THIS IS FOR CREATING THE OBJECT OF THE BOTTOMNAV
     final vm = context.watch<BottomNav>();
     return SafeArea(
@@ -39,34 +40,42 @@ class CustomBottomNavBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(
-              context,
-              icon: LucideIcons.home,
-              index: 0,
-              vm: vm,
-              label: "Home",
+            Expanded(
+              child: _navItem(
+                context,
+                icon: LucideIcons.home,
+                index: 0,
+                vm: vm,
+                label: "Home",
+              ),
             ),
-            _navItem(
-              context,
-              icon: LucideIcons.activity,
-              index: 1,
-              vm: vm,
-              label: "Activity",
+            Expanded(
+              child: _navItem(
+                context,
+                icon: LucideIcons.activity,
+                index: 1,
+                vm: vm,
+                label: "Activity",
+              ),
             ),
-            SizedBox(width: 8),
-            _navItem(
-              context,
-              icon: Icons.bar_chart_rounded,
-              index: 2,
-              vm: vm,
-              label: "Analytics",
+            SizedBox(width: 30),
+            Expanded(
+              child: _navItem(
+                context,
+                icon: Icons.bar_chart_rounded,
+                index: 2,
+                vm: vm,
+                label: "Analytics",
+              ),
             ),
-            _navItem(
-              context,
-              icon: LucideIcons.personStanding,
-              index: 3,
-              vm: vm,
-              label: "Profile",
+            Expanded(
+              child: _navItem(
+                context,
+                icon: LucideIcons.personStanding,
+                index: 3,
+                vm: vm,
+                label: "Profile",
+              ),
             ),
           ],
         ),

@@ -24,24 +24,71 @@ class _HeaderSectionState extends State<HeaderSection> {
           children: [
             Text(
               "Good Evening",
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 12,
+              ),
             ),
             Text(
               "Roshan Gunadey",
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ],
         ),
 
-        Switch(
-          value: widget.value,
-          activeThumbColor: Colors.amber,
-          onChanged: (_) => context.read<ThemeNotifier>().toggleTheme(),
-        ),
+        // Switch(
+
+        //   value: widget.value,
+        //   activeThumbColor: Colors.amber,
+        //   onChanged: (_) => context.read<ThemeNotifier>().toggleTheme(),
+        // ),
         //THIS IS THE AREA OF THE THEME CHANGING AREA
+        ThemeToggle(),
       ],
 
       //THIS IS THE AREA OF THE CARD
+    );
+  }
+}
+
+class ThemeToggle extends StatelessWidget {
+  const ThemeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = context.watch<ThemeNotifier>();
+    final isLight = notifier.themeMode == ThemeMode.light;
+
+    return GestureDetector(
+      onTap: () => notifier.toggleTheme(),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isLight ? Icons.light_mode : Icons.dark_mode,
+              size: 18,
+              color: Colors.amber,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              isLight ? "Light" : "Dark",
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

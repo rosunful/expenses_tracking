@@ -15,11 +15,11 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPage extends State<LandingPage> {
-  static const _pages = [
-    HomeScreen(),
+  static final _pages = [
+    const HomeScreen(),
     ActivityScreen(),
-    AnalyticsScreen(),
-    ProfileScreen(),
+    const AnalyticsScreen(),
+    const ProfileScreen(),
   ];
 
   @override
