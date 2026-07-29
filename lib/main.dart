@@ -1,3 +1,5 @@
+import 'package:expense_tracking/controllers/expenses_controller.dart';
+import 'package:expense_tracking/providers/transaction_provider.dart';
 import 'package:expense_tracking/screens/starting_onboard.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/theme/app_theme_notifier.dart';
@@ -11,6 +13,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => BottomNav()),
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider(create: (_) => ExpensesController(),),
+        ChangeNotifierProvider(create: (_) => TransactionProvider(),),
       ],
       child: const App(),
     ),

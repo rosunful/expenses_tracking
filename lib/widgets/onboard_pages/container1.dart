@@ -12,54 +12,19 @@ class Container1 extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CardContainer(
-          anyWidget:
-              //THIS PADDING IS FOR THE TO MAKE THE BAR TO BE IN GOOD POSITION
-              Padding(
-                padding: const EdgeInsets.all(40.0),
-
-                //THIS IS FOR THE STRAIGHT BAR LINE
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 12,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(14)),
-                        color: context.appColors.verticalLine,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Container(
-                      width: 12,
-                      height: 62,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(14)),
-                        color: context.appColors.verticalLongerLine,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Container(
-                      width: 12,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(14)),
-                        color: context.appColors.verticalLine,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Container(
-                      width: 12,
-                      height: 82,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(14)),
-                        color: context.appColors.verticalLongerLine,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          anyWidget: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _bar(32, context.appColors.verticalLine),
+                _bar(62, context.appColors.verticalLongerLine),
+                _bar(42, context.appColors.verticalLine),
+                _bar(82, context.appColors.verticalLongerLine),
+              ],
+            ),
+          ),
         ),
 
         HeadingText("Track every expense"),
@@ -72,6 +37,17 @@ class Container1 extends StatelessWidget {
           "Log spending in seconds with smart categories and receipt capture. ",
         ),
       ],
+    );
+  }
+
+  Widget _bar(double height, Color color) {
+    return Container(
+      width: 12,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: color,
+      ),
     );
   }
 }

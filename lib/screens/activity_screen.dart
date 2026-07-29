@@ -1,3 +1,4 @@
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -92,12 +93,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.white, //
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          225,
-                          225,
-                          225,
-                        ),
+                        backgroundColor:context.appColors.cardsBackground,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 14,
@@ -128,12 +124,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.white, //
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          225,
-                          225,
-                          225,
-                        ),
+                        backgroundColor: context.appColors.cardsBackground,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 14,
@@ -165,7 +156,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: const Color.fromARGB(255, 225, 225, 225),
+                    color: context.appColors.cardsBackground,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),

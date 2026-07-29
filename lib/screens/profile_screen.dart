@@ -1,3 +1,4 @@
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -38,9 +39,13 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       Text("hello big world"),
-                      Text("olivvagorilla@gmail.com",
-                       style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),),
+                      Text(
+                        "olivvagorilla@gmail.com",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -59,32 +64,19 @@ class ProfileScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            children: [Text("12",
-                             style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),), Text("Day Streak",
+                            children: [
+                              Text(
+                                "12",
                                 style: TextStyle(
-                              fontSize: 12
-                            ),)],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 225, 225, 225),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [Text("8",
-                             style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),), Text("Acheievement",
-                                style: TextStyle(
-                              fontSize: 12
-                            ),)],
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                "Day Streak",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -100,15 +92,45 @@ class ProfileScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              Text("82",
-                             style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                              Text(
+                                "8",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                "Acheievement",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
 
-                            ), Text("Health Score",
-                            style: TextStyle(
-                              fontSize: 12
-                            ),
-                            )],
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 225, 225, 225),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                "82",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                "Health Score",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -119,7 +141,7 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: const Color.fromARGB(255, 225, 225, 225),
+                    color: context.appColors.cardsBackground,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -132,8 +154,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Wallet & Account ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -146,8 +170,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Budget Planner ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -160,8 +186,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Saving Goals ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -174,8 +202,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Bills & Subscription ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -188,8 +218,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Reminder ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -202,8 +234,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Manage Categories ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -216,8 +250,10 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               Text(
                                 "Security & Privacy ",
-                                style: TextStyle(fontWeight: FontWeight.w700,
-                                color: Colors.black),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
                               ),
                               Icon(Icons.arrow_forward_ios),
                             ],
@@ -229,29 +265,25 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  width: double.infinity,                  
-                  child: OutlinedButton(                    
+                  width: double.infinity,
+                  child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.red,
                       backgroundColor: Colors.red.shade100,
-                      padding: const EdgeInsets.symmetric(
-                        
-                      ),
-                  
+                      padding: const EdgeInsets.symmetric(),
+
                       minimumSize: Size.zero,
-                      
-                  
-                  
-                  
-                      side: BorderSide(style: BorderStyle.none)
+
+                      side: BorderSide(style: BorderStyle.none),
                     ),
-                  
+
                     onPressed: () {},
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Text("Logout", style: TextStyle(
-                        color: Colors.red
-                      ),),
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class ExpensesChart extends StatelessWidget {
@@ -21,7 +22,7 @@ class ExpensesChart extends StatelessWidget {
             vertical: 14
           ),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 216, 216, 216),
+            color:  context.appColors.cardsBackground,
             borderRadius: BorderRadius.circular(20),
           ),
 

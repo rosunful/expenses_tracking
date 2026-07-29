@@ -1,3 +1,4 @@
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class TopCategoryCard extends StatelessWidget {
@@ -8,7 +9,7 @@ class TopCategoryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 216, 216, 216),
+          color: context.appColors.cardsBackground,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
