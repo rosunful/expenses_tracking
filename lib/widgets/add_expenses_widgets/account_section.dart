@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class AccountSection extends StatelessWidget {
   final String selectedAccount;
   final ValueChanged<String> onSelected;

@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class NoteField extends StatelessWidget {
   final TextEditingController controller;
 
-  const NoteField({
-    super.key,
-    required this.controller,
-  });
+  const NoteField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +11,7 @@ class NoteField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: "Add a note...",
-        prefixIcon: const Icon(Icons.edit_note),
+        prefixIcon: const Icon(Icons.note_add_rounded),
 
         filled: true,
         fillColor: Colors.grey.shade100,

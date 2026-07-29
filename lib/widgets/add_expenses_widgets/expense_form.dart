@@ -42,16 +42,16 @@ class ExpenseForm extends StatelessWidget {
           const SizedBox(height: 30),
 
           CategorySection(
-  selectedCategory: selectedCategory,
-  onSelected: onCategorySelected,
-),
+            selectedCategory: selectedCategory,
+            onSelected: onCategorySelected,
+          ),
 
           const SizedBox(height: 25),
 
           AccountSection(
-  selectedAccount: selectedAccount,
-  onSelected: onAccountSelected,
-),
+            selectedAccount: selectedAccount,
+            onSelected: onAccountSelected,
+          ),
 
           const SizedBox(height: 25),
 
