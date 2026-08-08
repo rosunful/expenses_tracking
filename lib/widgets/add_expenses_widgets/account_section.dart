@@ -10,12 +10,7 @@ class AccountSection extends StatelessWidget {
     required this.onSelected,
   });
 
-  final List<String> accounts = const [
-    "Cash",
-    "Bank",
-    "Card",
-    "Wallet",
-  ];
+  final List<String> accounts = const ["Cash", "Bank", "Card"];
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +20,18 @@ class AccountSection extends StatelessWidget {
         const Text(
           "ACCOUNT",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.black54,
+            fontSize: 10,
+            letterSpacing: 0.7,
           ),
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
 
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 8,
+          runSpacing: 8,
           children: accounts.map((account) {
             final bool isSelected = account == selectedAccount;
 
@@ -44,22 +40,21 @@ class AccountSection extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 10,
+                  horizontal: 14,
+                  vertical: 8,
                 ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? Colors.blue
-                      : Colors.black,
-                  borderRadius: BorderRadius.circular(20),
+                      ? const Color(0xFF1C6B47)
+                      : const Color(0xFFF1F5F2),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   account,
                   style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : Colors.black87,
+                    color: isSelected ? Colors.white : const Color(0xFF26332C),
                     fontWeight: FontWeight.w600,
+                    fontSize: 11,
                   ),
                 ),
               ),

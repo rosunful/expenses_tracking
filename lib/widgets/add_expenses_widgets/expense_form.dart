@@ -35,33 +35,35 @@ class ExpenseForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 4),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AmountDisplay(amount: amount),
+          Center(child: AmountDisplay(amount: amount)),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 22),
 
           CategorySection(
             selectedCategory: selectedCategory,
             onSelected: onCategorySelected,
           ),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 18),
 
           AccountSection(
             selectedAccount: selectedAccount,
             onSelected: onAccountSelected,
           ),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 18),
 
           NoteField(controller: noteController),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 18),
 
           NumberPad(onKeyPressed: onKeyPressed),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 18),
 
           SaveButton(isExpense: true, onPressed: onSave),
         ],

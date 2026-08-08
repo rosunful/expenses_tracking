@@ -1,93 +1,58 @@
+import 'package:expense_tracking/providers/auth_provider.dart';
 import 'package:expense_tracking/theme/app_theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HeaderSection extends StatefulWidget {
-  final dynamic value;
+class HeaderSection extends StatelessWidget {
+  const HeaderSection({super.key});
 
-  const HeaderSection({super.key, required this.value});
+  String _greeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  }
 
-  @override
-  State<HeaderSection> createState() => _HeaderSectionState();
-}
-
-class _HeaderSectionState extends State<HeaderSection> {
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthProvider>().user;
+    final name = user?.displayName?.trim().isNotEmpty == true
+        ? user!.displayName!
+        : user?.email?.split('@').first ?? 'there';
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        //THIS IS FOR THE GOOD MORNING
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Good Evening",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 12,
-              ),
-            ),
-            Text(
-              "Roshan Gunadey",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+            Text(_greeting(), style: Theme.of(context).textTheme.bodySmall),
+            Text(name, style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w900,
+              color: Colors.black
+            )),
           ],
         ),
-
-        // Switch(
-
-        //   value: widget.value,
-        //   activeThumbColor: Colors.amber,
-        //   onChanged: (_) => context.read<ThemeNotifier>().toggleTheme(),
-        // ),
-        //THIS IS THE AREA OF THE THEME CHANGING AREA
-        ThemeToggle(),
+        const _ThemeToggle(),
       ],
-
-      //THIS IS THE AREA OF THE CARD
     );
   }
 }
 
-class ThemeToggle extends StatelessWidget {
-  const ThemeToggle({super.key});
+class _ThemeToggle extends StatelessWidget {
+  const _ThemeToggle();
 
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<ThemeNotifier>();
     final isLight = notifier.themeMode == ThemeMode.light;
 
-    return GestureDetector(
-      onTap: () => notifier.toggleTheme(),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isLight ? Icons.light_mode : Icons.dark_mode,
-              size: 18,
-              color: Colors.amber,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              isLight ? "Light" : "Dark",
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
+    return IconButton(
+      tooltip: isLight ? 'Use dark theme' : 'Use light theme',
+      onPressed: notifier.toggleTheme,
+      icon: Icon(
+        isLight ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
       ),
     );
   }

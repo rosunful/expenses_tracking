@@ -1,6 +1,6 @@
-import 'package:expense_tracking/widgets/activity_widgets/expenses_chart.dart';
-import 'package:expense_tracking/widgets/activity_widgets/ranking_item_section.dart';
-import 'package:expense_tracking/widgets/activity_widgets/spending_progressbar.dart';
+import 'package:expense_tracking/widgets/analytics_widgets/expenses_chart.dart';
+import 'package:expense_tracking/widgets/analytics_widgets/ranking_item_section.dart';
+import 'package:expense_tracking/widgets/analytics_widgets/spending_progressbar.dart';
 import 'package:flutter/material.dart';
 class AnalyticsScreen extends StatelessWidget {
   const AnalyticsScreen({super.key});
@@ -17,15 +17,9 @@ class AnalyticsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
 
-
-
               ExpensesChart(),
 
-              
-
               SpendingCategoryCard(),
-
-              
 
               TopCategoryCard(),
             ],

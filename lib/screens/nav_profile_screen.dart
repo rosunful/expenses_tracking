@@ -1,4 +1,5 @@
 import 'package:expense_tracking/theme/app_theme.dart';
+import 'package:expense_tracking/screens/budgets_palnner_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -165,6 +166,11 @@ class ProfileScreen extends StatelessWidget {
                         ),
 
                         InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const BudgetPlannerScreen(),
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

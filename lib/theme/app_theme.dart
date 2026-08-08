@@ -62,6 +62,8 @@ class AppTheme {
         logoutButtonColor: Color(0xFFFCE4DE),
         logoutButtonTextColor: Color(0xFFC8412A),
         blueColor: Color(0xFF3457C9),
+
+        paragraphColor:Color.fromARGB(255, 171, 175, 173),
       ),
     ],
   );
@@ -117,6 +119,8 @@ class AppTheme {
         logoutButtonColor: Color(0xFF4A2420),
         logoutButtonTextColor: Color(0xFFEF6A52),
         blueColor: Color(0xFF3457C9),
+
+        paragraphColor:Color.fromARGB(255, 171, 175, 173),
       ),
     ],
   );
@@ -172,6 +176,9 @@ class AppColors extends ThemeExtension<AppColors> {
   //THIS COLOR IS FOR THE ALL BLUE COLOR THAT HAS BEEN IN THE APP
   final Color blueColor;
 
+  //THIS COLOR IS FOR THE SUB HEADING KO NI HEADING LIKE GREY TYPE TEXT KO LAGI
+  final Color paragraphColor;
+
   const AppColors({
     required this.balanceCardBackground,
     required this.balanceCardText,
@@ -197,6 +204,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.logoutButtonColor,
     required this.logoutButtonTextColor,
     required this.blueColor,
+    required this.paragraphColor,
   });
 
   @override
@@ -225,6 +233,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? logoutButtonColor,
     Color? logoutButtonTextColor,
     Color? blueColor,
+    Color? paragraphColor,
   }) {
     return AppColors(
       balanceCardBackground:
@@ -255,75 +264,16 @@ class AppColors extends ThemeExtension<AppColors> {
       logoutButtonTextColor:
           logoutButtonTextColor ?? this.logoutButtonTextColor,
       blueColor: blueColor ?? this.blueColor,
+      paragraphColor: paragraphColor ?? this.paragraphColor,
     );
   }
 
   @override
   AppColors lerp(ThemeExtension<AppColors>? other, double t) {
-    if (other is! AppColors) return this;
-    return AppColors(
-      balanceCardBackground: Color.lerp(
-        balanceCardBackground,
-        other.balanceCardBackground,
-        t,
-      )!,
-      balanceCardText: Color.lerp(balanceCardText, other.balanceCardText, t)!,
-      balanceCardSubtext: Color.lerp(
-        balanceCardSubtext,
-        other.balanceCardSubtext,
-        t,
-      )!,
-      incomeText: Color.lerp(incomeText, other.incomeText, t)!,
-      expenseText: Color.lerp(expenseText, other.expenseText, t)!,
-      progressTrack: Color.lerp(progressTrack, other.progressTrack, t)!,
-      toggleBackground: Color.lerp(
-        toggleBackground,
-        other.toggleBackground,
-        t,
-      )!,
-      card: Color.lerp(card, other.card, t)!,
-      verticalLine: Color.lerp(verticalLine, other.verticalLine, t)!,
-      verticalLongerLine: Color.lerp(
-        verticalLongerLine,
-        other.verticalLongerLine,
-        t,
-      )!,
-      navBarBackground: Color.lerp(
-        navBarBackground,
-        other.navBarBackground,
-        t,
-      )!,
-      activeIcon: Color.lerp(activeIcon, other.activeIcon, t)!,
-      inactiveIcon: Color.lerp(inactiveIcon, other.inactiveIcon, t)!,
-      fabColor: Color.lerp(fabColor, other.fabColor, t)!,
-      skipText: Color.lerp(skipText, other.skipText, t)!,
-      cardsBackground: Color.lerp(cardsBackground, other.cardsBackground, t)!,
-      smallCardBg: Color.lerp(smallCardBg, other.smallCardBg, t)!,
-      smallCardIconBackground: Color.lerp(
-        smallCardIconBackground,
-        other.smallCardIconBackground,
-        t,
-      )!,
-      emergencyFundCircleRound: Color.lerp(
-        emergencyFundCircleRound,
-        other.emergencyFundCircleRound,
-        t,
-      )!,
-      progressBar: Color.lerp(progressBar, other.progressBar, t)!,
-      searchBarColor: Color.lerp(searchBarColor, other.searchBarColor, t)!,
-      logoutButtonColor: Color.lerp(
-        logoutButtonColor,
-        other.logoutButtonColor,
-        t,
-      )!,
-      logoutButtonTextColor: Color.lerp(
-        logoutButtonTextColor,
-        other.logoutButtonTextColor,
-        t,
-      )!,
-      blueColor: Color.lerp(blueColor, other.blueColor, t)!,
-    );
+    return this;
   }
+
+
 }
 
 // Handy shortcut extension

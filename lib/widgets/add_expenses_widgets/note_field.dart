@@ -9,16 +9,26 @@ class NoteField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      style: const TextStyle(fontSize: 12),
       decoration: InputDecoration(
-        hintText: "Add a note...",
-        prefixIcon: const Icon(Icons.note_add_rounded),
+        hintText: "Add note (optional)",
+        hintStyle: const TextStyle(fontSize: 11, color: Colors.black38),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 11,
+        ),
 
         filled: true,
-        fillColor: Colors.grey.shade100,
+        fillColor: const Color(0xFFF1F5F2),
 
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xFFDCE5DF)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xFFDCE5DF)),
         ),
       ),
     );

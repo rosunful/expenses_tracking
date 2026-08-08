@@ -1,4 +1,5 @@
 import 'package:expense_tracking/screens/landing_page.dart';
+import 'package:expense_tracking/screens/login_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/widgets/onboard_pages/container1.dart';
 import 'package:expense_tracking/widgets/onboard_pages/container2.dart';
@@ -9,8 +10,10 @@ import 'package:expense_tracking/widgets/onboard_widgets/next_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:expense_tracking/theme/utils.dart';
+import 'package:expense_tracking/providers/auth_provider.dart';
 
 class StartingOnboard extends StatefulWidget {
   const StartingOnboard({super.key});
@@ -24,8 +27,8 @@ class _StartingOnboard extends State<StartingOnboard> {
 
   @override
   Widget build(BuildContext context) {
-
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final authProvider = context.read<AuthProvider>();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // value: const SystemUiOverlayStyle(
@@ -48,7 +51,7 @@ class _StartingOnboard extends State<StartingOnboard> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsetsGeometry.fromLTRB(20, 10, 20, 30),
+            padding: const EdgeInsetsGeometry.fromLTRB(20, 10, 20, 60),
 
             //THIS IS FOR THE WHOLE SCREEN CONTENT INSIDE
             //THE ONBOARDING SCREEN LIKE
@@ -100,7 +103,7 @@ class _StartingOnboard extends State<StartingOnboard> {
                 //THIS IS FOR THE ANIMATION PAGE INDICATOR AND WE WILL CREATE THE CLASS AND
                 //CALL THEM HERE TOO
                 Padding(
-                  padding: const EdgeInsetsGeometry.fromLTRB(0, 0, 0, 18),
+                  padding: const EdgeInsetsGeometry.fromLTRB(0, 0, 0, 24),
                   child: SmoothPageIndicator(
                     controller: _control,
                     count: 5,
@@ -113,12 +116,12 @@ class _StartingOnboard extends State<StartingOnboard> {
                       radius:
                           16, // corner rounding — high value = fully pill-shaped
                       activeDotColor: const Color(0xFF3DDC97),
-                      dotColor:Theme.of(context).colorScheme.onSurface,
+                      dotColor: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
 
-                //THIS IS THE BUTTON AREA HERE WILL WILL CREATE THE CLASS AND
+                //THIS IS THE BUTTON AREA HERE WILL CREATE THE CLASS AND
                 //CALL THEM HERE TO MAKE THE CODE READABLE
                 if (_currentPage == 0)
                   Row(
@@ -173,7 +176,13 @@ class _StartingOnboard extends State<StartingOnboard> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LandingPage(),
+                                builder: (context) {
+                                  if (authProvider.isLoggedIn) {
+                                    return const LandingPage();
+                                  }
+
+                                  return const LoginScreen();
+                                },
                               ),
                             );
                           } else {

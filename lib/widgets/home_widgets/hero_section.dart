@@ -1,16 +1,24 @@
+import 'package:expense_tracking/controllers/expenses_controller.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
+import 'package:expense_tracking/widgets/home_widgets/currency_foramatter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final expenses = context.watch<ExpensesController>();
+    final income = expenses.totalIncome;
+    final expense = expenses.totalExpenses;
+    final balance = income - expense;
+
     return Padding(
-      padding: EdgeInsetsGeometry.symmetric(horizontal: 2, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(24)),
+          borderRadius: const BorderRadius.all(Radius.circular(24)),
           color: context.appColors.balanceCardBackground,
         ),
         width: double.infinity,
@@ -20,13 +28,13 @@ class HeroSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Total balance",
+                "TOTAL BALANCE",
                 style: TextStyle(color: context.appColors.balanceCardSubtext),
               ),
               Padding(
-                padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
-                  "\$12,480.50",
+                  formatCurrency(balance),
                   style: TextStyle(
                     color: context.appColors.balanceCardText,
                     fontSize: 24,
@@ -42,34 +50,25 @@ class HeroSection extends StatelessWidget {
                     children: [
                       Text(
                         "Income",
-                        style: TextStyle(
-                          color: context.appColors.balanceCardSubtext,
-                        ),
+                        style: TextStyle(color: context.appColors.balanceCardSubtext),
                       ),
                       Text(
-                        "\$4,250.00",
-                        style: TextStyle(
-                          color: context.appColors.balanceCardText,
-                        ),
+                        formatCurrency(income),
+                        style: TextStyle(color: context.appColors.balanceCardText, fontWeight: FontWeight(500),),
                       ),
                     ],
                   ),
-                  SizedBox(width: 10),
-
+                  const SizedBox(width: 24),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Expense",
-                        style: TextStyle(
-                          color: context.appColors.balanceCardSubtext,
-                        ),
+                        style: TextStyle(color: context.appColors.balanceCardSubtext),
                       ),
                       Text(
-                        "\$171.09",
-                        style: TextStyle(
-                          color: context.appColors.balanceCardText,
-                        ),
+                        formatCurrency(expense),
+                        style: TextStyle(color: context.appColors.balanceCardText , fontWeight: FontWeight(500)),
                       ),
                     ],
                   ),

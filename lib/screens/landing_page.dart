@@ -1,7 +1,8 @@
-import 'package:expense_tracking/screens/activity_screen.dart';
-import 'package:expense_tracking/screens/analytics_screen.dart';
-import 'package:expense_tracking/screens/home_screen.dart';
-import 'package:expense_tracking/screens/profile_screen.dart';
+import 'package:expense_tracking/screens/nav_activity_screen.dart';
+import 'package:expense_tracking/screens/add_expenses_screen.dart';
+import 'package:expense_tracking/screens/nav_analytics_screen.dart';
+import 'package:expense_tracking/screens/nav_home_screen.dart';
+import 'package:expense_tracking/screens/nav_profile_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottom_nav_bar.dart';
@@ -28,7 +29,7 @@ class _LandingPage extends State<LandingPage> {
     return Scaffold(
       body: SafeArea(
         child: IndexedStack(
-          // preserves each tab's state 
+          // preserves each tab's state
           index: vm.selectedIndex,
           children: _pages,
         ),
@@ -43,14 +44,22 @@ class _LandingPage extends State<LandingPage> {
           border: Border.all(
             width: 2,
             color: context.appColors.navBarBackground,
-            style: BorderStyle.solid
+            style: BorderStyle.solid,
           ),
-         
         ),
         child: IconButton(
-          icon: Icon(Icons.add, color:Theme.of(context).bottomNavigationBarTheme.backgroundColor, size: 28),
+          icon: Icon(
+            Icons.add,
+            color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            size: 28,
+          ),
           onPressed: () {
-            // open add expense/income bottom sheet
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddExpensesScreen(),
+              ),
+            );
           },
         ),
       ),

@@ -2,7 +2,6 @@ import 'package:expense_tracking/providers/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class ExpenseIncomeSwitch extends StatelessWidget {
   const ExpenseIncomeSwitch({super.key});
 
@@ -11,11 +10,11 @@ class ExpenseIncomeSwitch extends StatelessWidget {
     final provider = context.watch<TransactionProvider>();
 
     return Container(
-      height: 42,
-      padding: const EdgeInsets.all(4),
+      height: 34,
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: const Color(0xffE9EEEA),
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Stack(
         children: [
@@ -26,10 +25,10 @@ class ExpenseIncomeSwitch extends StatelessWidget {
                 ? Alignment.centerLeft
                 : Alignment.centerRight,
             child: Container(
-              width: (MediaQuery.of(context).size.width - 40) / 2,
+              width: (MediaQuery.of(context).size.width - 46) / 2,
               decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(20),
+                color: const Color(0xFF1C6B47),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
           ),
@@ -38,13 +37,14 @@ class ExpenseIncomeSwitch extends StatelessWidget {
             children: [
               Expanded(
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(8),
                   onTap: provider.selectExpense,
                   child: Center(
                     child: Text(
                       "Expense",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
                         color: provider.isExpense
                             ? Colors.white
                             : Colors.black54,
@@ -56,13 +56,14 @@ class ExpenseIncomeSwitch extends StatelessWidget {
 
               Expanded(
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(8),
                   onTap: provider.selectIncome,
                   child: Center(
                     child: Text(
                       "Income",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
                         color: provider.isExpense
                             ? Colors.black54
                             : Colors.white,
