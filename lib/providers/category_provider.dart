@@ -81,6 +81,36 @@ class CategoryProvider extends ChangeNotifier {
     await _repository.deleteCategory(categoryId);
   }
 
+  /// Same duplicate-guard idea as addCategory — you shouldn't be able
+  /// to rename "Pets" to "Food" and end up with the same crash-causing
+  /// duplicate categoriesFor() protects against. Excludes the category
+  /// being renamed itself from that check, obviously, or renaming a
+  /// category to its OWN current name would incorrectly count as a
+  /// duplicate.
+  ///
+  /// Takes [oldName] explicitly (rather than looking it up) because the
+  /// caller already has it on hand from the CategoryModel being edited,
+  /// and it's needed to find every existing transaction/reminder/budget
+  /// that used the old name so they can be rewritten to the new one.
+  Future<bool> renameCategory(
+    String categoryId,
+    String oldName,
+    String newName,
+    CategoryType type,
+  ) async {
+    final trimmed = newName.trim();
+    if (trimmed.isEmpty) return false;
+
+    final alreadyExists = categoriesFor(type).any(
+      (c) => c.id != categoryId && c.name.toLowerCase() == trimmed.toLowerCase(),
+    );
+    if (alreadyExists) return false;
+
+    await _repository.updateCategoryName(categoryId, trimmed);
+    await _repository.cascadeRenameCategory(oldName, trimmed, type);
+    return true;
+  }
+
   @override
   void dispose() {
     _subscription?.cancel();

@@ -54,7 +54,7 @@ class _LandingPage extends State<LandingPage> {
             size: 28,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const AddExpensesScreen(),

@@ -43,12 +43,12 @@ class TopCategoryCard extends StatelessWidget {
             children: [
               Text(
                 categoryTotals.isEmpty ? topCategory : 'Top category: $topCategory',
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
               ),
               const SizedBox(height: 4),
-              const Text(
+              Text(
                 "Based on this month's activity",
-                style: TextStyle(color: Colors.black54, fontSize: 12),
+                style: TextStyle(color: context.appColors.paragraphColor, fontSize: 12),
               ),
             ],
           ),

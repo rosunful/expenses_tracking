@@ -1,3 +1,4 @@
+import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/widgets/add_expenses_widgets/expense_form.dart';
 import 'package:expense_tracking/widgets/add_expenses_widgets/expense_income_switch.dart';
 import 'package:expense_tracking/providers/transaction_provider.dart';
@@ -110,9 +111,11 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
     // context used after an await — always re-check mounted first.
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(isExpense ? "Expense Saved" : "Income Saved")),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(content: Text(isExpense ? "Expense Saved" : "Income Saved")),
+    // );
+
+    context.read<NotifyingProvider>().showMessage(isExpense ? "Expense Saved" : "Income Saved");
     Navigator.of(context).pop();
   }
 
@@ -126,7 +129,7 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
           child: Column(
             children: [
               Row(
@@ -145,9 +148,13 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
+                  Text(
                     "Add Transaction",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ],
               ),

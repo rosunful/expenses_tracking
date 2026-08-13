@@ -32,29 +32,76 @@ class CategoryChipPicker extends StatelessWidget {
     );
   }
 
-  /// "More" opens a bottom sheet showing every category as a scrollable
-  /// wrap — for SELECTING one, as opposed to Manage Categories, which is
-  /// for ADDING/DELETING. Tapping a chip here both selects it and closes
-  /// the sheet.
+  /// "More" opens a centered dialog showing every category as a
+  /// scrollable wrap — for SELECTING one, as opposed to Manage
+  /// Categories, which is for ADDING/DELETING. Tapping a chip here both
+  /// selects it and closes the dialog.
+  ///
+  /// A dialog instead of a bottom sheet: bottom sheets size themselves
+  /// to their content by default with no height cap, so a long list of
+  /// categories could extend past the visible screen with nothing to
+  /// scroll it into view. Capping this dialog's height and wrapping the
+  /// Wrap in a SingleChildScrollView means it never gets cut off — it
+  /// just scrolls internally instead.
   void _openAllCategoriesSheet(BuildContext context, List<CategoryModel> all) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetContext) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final category in all)
-                _chip(category.name, category.name == selectedCategory, () {
-                  onSelected(category.name);
-                  Navigator.of(sheetContext).pop();
-                }),
-            ],
+      builder: (dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(dialogContext).size.height * 0.6,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'All categories',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+
+                      _chip2('+ Add New', false, () {
+                        Navigator.of(dialogContext).pop();
+                        _openManageCategories(context);
+                      }),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final category in all)
+                            _chip(
+                              category.name,
+                              category.name == selectedCategory,
+                              () {
+                                onSelected(category.name);
+                                Navigator.of(dialogContext).pop();
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -72,14 +119,14 @@ class CategoryChipPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 8),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
           child: Text(
             "CATEGORY",
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              color: Colors.black54,
+              color: Theme.of(context).colorScheme.onSurface ,
               letterSpacing: 0.7,
             ),
           ),
@@ -94,13 +141,11 @@ class CategoryChipPicker extends StatelessWidget {
                 category.name == selectedCategory,
                 () => onSelected(category.name),
               ),
-            if (hasMore)
-              _chip(
-                'More',
-                false,
-                () => _openAllCategoriesSheet(context, allCategories),
-              ),
-            _chip('+ New', false, () => _openManageCategories(context)),
+            // "More" now visually distinct from a regular category chip
+            // — outlined instead of filled, with an icon, so it reads
+            // as an action rather than another option in the list.
+            if (hasMore) _moreChip(context, allCategories),
+           
           ],
         ),
       ],
@@ -124,6 +169,68 @@ class CategoryChipPicker extends StatelessWidget {
             fontSize: 11,
             color: isSelected ? Colors.white : Colors.black87,
           ),
+        ),
+      ),
+    );
+  }
+
+   Widget _chip2(String label, bool isSelected, VoidCallback onTap) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(164, 220, 220, 220),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            width: 0.1,
+            color: Colors.black,
+            style: BorderStyle.solid
+          )     
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 11,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Deliberately different from _chip's filled style — an outlined
+  /// pill with a small icon, so "there are more options hiding here"
+  /// reads as its own kind of control rather than blending in with the
+  /// actual category choices.
+  Widget _moreChip(BuildContext context, List<CategoryModel> all) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: () => _openAllCategoriesSheet(context, all),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(color: const Color.fromARGB(98, 171, 210, 193), width: 0.9),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.expand_more_rounded, size: 14, color: Color.fromARGB(182, 33, 113, 77)),
+            const SizedBox(width: 3),
+            Text(
+              'More',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 11,
+                color: Theme.of(context).colorScheme.onSurface
+                
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,9 +1,4 @@
-/// Unlike TransactionModel or BudgetModel, a goal's savedAmount IS
-/// stored directly — there's no "category" to compute it from live.
-/// It only changes when the user explicitly contributes money on the
-/// Add Contribution screen, so storing it is the correct source of
-/// truth here (not a workaround, unlike budgets' currentAmount would
-/// have been).
+
 class SavingsGoalModel {
   final String id;
   final String title;

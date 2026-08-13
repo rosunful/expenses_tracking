@@ -16,8 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  List<String> songs = ["pehla", "payyar", "mera"];
-
+  
   String jsonn = '{"j.name" : "roshan", "j.age":20,"j.funny":true}';
 
   MeroModel obj = MeroModel(name: "haro", age: 32, funny: false);

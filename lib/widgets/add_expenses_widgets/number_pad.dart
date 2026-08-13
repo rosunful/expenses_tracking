@@ -33,7 +33,7 @@ class NumberPad extends StatelessWidget {
               child: Text(
                 keys[index] == '⌫' ? '⌫' : keys[index],
                 style: const TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF26332C),
                 ),

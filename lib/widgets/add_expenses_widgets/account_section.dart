@@ -17,11 +17,11 @@ class AccountSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "ACCOUNT",
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Colors.black54,
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 10,
             letterSpacing: 0.7,
           ),

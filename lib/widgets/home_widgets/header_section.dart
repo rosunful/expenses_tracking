@@ -30,7 +30,7 @@ class HeaderSection extends StatelessWidget {
             Text(name, style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w900,
-              color: Colors.black
+              color: Theme.of(context).colorScheme.onSurface,
             )),
           ],
         ),

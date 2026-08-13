@@ -28,9 +28,9 @@ class ExpensesChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
       children: [
-        const Text(
+        Text(
           "Analytics",
-          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color:Theme.of(context).colorScheme.onSurface),
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
@@ -41,9 +41,9 @@ class ExpensesChart extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "Income vs Expense",
-                style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+                style: TextStyle(fontWeight: FontWeight.w600, color:Theme.of(context).colorScheme.onSurface),
               ),
               const SizedBox(height: 24),
               Row(
@@ -51,12 +51,14 @@ class ExpensesChart extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _bar(
+                    context: context,
                     height: barHeight(income),
                     color: Colors.green.shade700,
                     label: "Income",
                     amount: income,
                   ),
                   _bar(
+                    context: context,
                     height: barHeight(expense),
                     color: Colors.indigo,
                     label: "Expense",
@@ -72,6 +74,7 @@ class ExpensesChart extends StatelessWidget {
   }
 
   Widget _bar({
+    required BuildContext context,
     required double height,
     required Color color,
     required String label,
@@ -81,7 +84,7 @@ class ExpensesChart extends StatelessWidget {
       children: [
         Text(
           '\$${amount.toStringAsFixed(0)}',
-          style: const TextStyle(fontSize: 12, color: Colors.black54),
+          style: TextStyle(fontSize: 12, color:Theme.of(context).colorScheme.onSurface),
         ),
         const SizedBox(height: 4),
         Container(

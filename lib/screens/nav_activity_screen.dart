@@ -63,9 +63,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
               spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Transaction",
-                  style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black),
+                  style: TextStyle(fontWeight: FontWeight.bold, color:Theme.of(context).colorScheme.onSurface , fontSize: 26),
                 ),
                 TextField(
                   controller: searchTxt,
@@ -74,13 +74,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   decoration: InputDecoration(
                     hintText: "Search merchant or category",
                     hintStyle: TextStyle(color: Colors.grey[400], fontSize: 12),
-                    enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(color: Colors.black, width: 0.5),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(color:Theme.of(context).colorScheme.onSurface, width: 0.5),
                     ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(color: Colors.black, width: 1),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(color:Theme.of(context).colorScheme.onSurface, width: 1),
                     ),
                   ),
                 ),
@@ -93,12 +93,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   ],
                 ),
                 if (visibleTransactions.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Center(
                       child: Text(
                         "No transactions found",
-                        style: TextStyle(color: Colors.black54),
+                        style: TextStyle(color:Theme.of(context).colorScheme.onSurface),
                       ),
                     ),
                   )
@@ -153,7 +153,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 12,
-          color: isActive ? Colors.white : Colors.black,
+          color: isActive ? Colors.white : Theme.of(context).colorScheme.onSurface
         ),
       ),
     );
@@ -186,9 +186,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     children: [
                       Text(
                         tx.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),

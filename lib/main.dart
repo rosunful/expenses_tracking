@@ -2,6 +2,7 @@ import 'package:expense_tracking/controllers/expenses_controller.dart';
 import 'package:expense_tracking/providers/auth_provider.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
 import 'package:expense_tracking/providers/category_provider.dart';
+import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/providers/reminder_provider.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
 import 'package:expense_tracking/providers/transaction_provider.dart';
@@ -29,6 +30,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => BudgetProvider()),
         ChangeNotifierProvider(create: (_) => ReminderProvider()),
         ChangeNotifierProvider(create: (_) => SavingsGoalProvider()),
+        ChangeNotifierProvider(create: (_) => NotifyingProvider()),
 
       ],
       child: const App(),

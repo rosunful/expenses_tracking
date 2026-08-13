@@ -1,7 +1,5 @@
-import 'package:expense_tracking/controllers/note_screen.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
 import 'package:expense_tracking/screens/bills_subscription_screen.dart';
-import 'package:expense_tracking/screens/manage_category_screen.dart';
 import 'package:expense_tracking/screens/saving_goal_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/screens/budgets_palnner_screen.dart';
@@ -11,7 +9,6 @@ import 'package:expense_tracking/providers/budgets_provider.dart';
 import 'package:expense_tracking/models/budgets_model.dart';
 import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
 import 'package:expense_tracking/screens/login_screen.dart';
-import 'package:expense_tracking/models/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +17,7 @@ import 'package:provider/provider.dart';
 /// that's over contributes less, scaled by how far over it is. Returns
 /// null when there are no budgets at all, since "average of nothing"
 /// isn't a meaningful score — the UI shows a prompt instead in that case.
-double? _computeHealthScore(
-  List<BudgetModel> budgets,
-  ExpensesController controller,
-) {
+double? _computeHealthScore(List<BudgetModel> budgets, ExpensesController controller) {
   if (budgets.isEmpty) return null;
 
   double totalScore = 0;
@@ -48,59 +42,12 @@ double? _computeHealthScore(
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  /// "Manage Categories" doesn't know which list to open on its own —
-  /// Expense, Income, and Reminder categories are all separate. This
-  /// small chooser lets the user pick before ManageCategoriesScreen
-  /// (which requires a CategoryType) opens.
-  Future<void> _openCategoryChooser(BuildContext context) async {
-    final type = await showDialog<CategoryType>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Manage which categories?'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.arrow_upward, color: Colors.red),
-              title: const Text('Expense categories'),
-              onTap: () =>
-                  Navigator.of(dialogContext).pop(CategoryType.expense),
-            ),
-            ListTile(
-              leading: const Icon(Icons.arrow_downward, color: Colors.green),
-              title: const Text('Income categories'),
-              onTap: () => Navigator.of(dialogContext).pop(CategoryType.income),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.notifications_none,
-                color: Colors.indigo,
-              ),
-              title: const Text('Reminder categories'),
-              onTap: () =>
-                  Navigator.of(dialogContext).pop(CategoryType.reminder),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    if (type != null && context.mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => ManageCategoriesScreen(type: type)),
-      );
-    }
-  }
-
   Future<void> _logout(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Log out?'),
-        content: const Text(
-          'You\'ll need to sign in again to access your data.',
-        ),
+        content: const Text('You\'ll need to sign in again to access your data.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -132,6 +79,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
+    // final streak = context.watch<ExpensesController>().currentStreak;
     final activeGoals = context.watch<SavingsGoalProvider>().goals.length;
     final budgets = context.watch<BudgetProvider>().budgets;
     final expensesController = context.watch<ExpensesController>();
@@ -147,9 +95,7 @@ class ProfileScreen extends StatelessWidget {
     final displayName = (user?.displayName?.isNotEmpty ?? false)
         ? user!.displayName!
         : (email.contains('@') ? email.split('@').first : 'Friend');
-    final avatarLetter = displayName.isNotEmpty
-        ? displayName[0].toUpperCase()
-        : '?';
+    final avatarLetter = displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
 
     return Scaffold(
       body: SafeArea(
@@ -157,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: Column(
-              spacing: 20,
+              spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
@@ -187,10 +133,7 @@ class ProfileScreen extends StatelessWidget {
                       Text(displayName),
                       Text(
                         email,
-                        style:  TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color:Theme.of(context).colorScheme.onSurface,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
                       ),
                     ],
                   ),
@@ -204,9 +147,7 @@ class ProfileScreen extends StatelessWidget {
                     // _StatCard(value: '$streak', label: 'Day Streak'),
                     _StatCard(value: '$activeGoals', label: 'Active Goals'),
                     _StatCard(
-                      value: healthScore == null
-                          ? '—'
-                          : healthScore.round().toString(),
+                      value: healthScore == null ? '—' : healthScore.round().toString(),
                       label: 'Health Score',
                     ),
                   ],
@@ -220,7 +161,7 @@ class ProfileScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Column(
-                      spacing: 20,
+                      spacing: 8,
                       children: [
                         // Not built yet — intentionally left without
                         // onTap for now, per your call to leave these two.
@@ -229,27 +170,21 @@ class ProfileScreen extends StatelessWidget {
                         _ProfileRow(
                           label: 'Budget Planner',
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const BudgetPlannerScreen(),
-                            ),
+                            MaterialPageRoute(builder: (_) => const BudgetPlannerScreen()),
                           ),
                         ),
 
                         _ProfileRow(
                           label: 'Savings Goals',
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const SavingsGoalsScreen(),
-                            ),
+                            MaterialPageRoute(builder: (_) => const SavingsGoalsScreen()),
                           ),
                         ),
 
                         _ProfileRow(
                           label: 'Bills & Subscription',
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const BillsSubscriptionsScreen(),
-                            ),
+                            MaterialPageRoute(builder: (_) => const BillsSubscriptionsScreen()),
                           ),
                         ),
 
@@ -262,33 +197,15 @@ class ProfileScreen extends StatelessWidget {
                         _ProfileRow(
                           label: 'Reminders',
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const BillsSubscriptionsScreen(),
-                            ),
+                            MaterialPageRoute(builder: (_) => const BillsSubscriptionsScreen()),
                           ),
                         ),
 
-                        // Now wired — opens a chooser first since
-                        // categories are split by type (Expense/Income/
-                        // Reminder).
-                        _ProfileRow(
-                          label: 'Manage Categories',
-                          onTap: () => _openCategoryChooser(context),
-                        ),
+                        // Skipped per your request — no onTap for now.
+                        const _ProfileRow(label: 'Manage Categories'),
 
                         // Not built yet.
                         const _ProfileRow(label: 'Security & Privacy'),
-
-                        _ProfileRow(
-                          label: 'Create Notes',
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const NoteScreen(),
-                            ),
-                          ),
-                        ),
-                       
-                      
                       ],
                     ),
                   ),
@@ -306,11 +223,8 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     onPressed: () => _logout(context),
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(color: Colors.red),
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: 4),
+                      child: Text('Logout', style: TextStyle(color: Colors.red)),
                     ),
                   ),
                 ),
@@ -340,13 +254,7 @@ class _StatCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
+              Text(value, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.black)),
               Text(label, style: const TextStyle(fontSize: 12)),
             ],
           ),
@@ -368,36 +276,11 @@ class _ProfileRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            '$label ',
-            style:  TextStyle(
-              fontWeight: FontWeight.w700,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+          Text('$label ', style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.black)),
+          Icon(Icons.arrow_forward_ios,
+              size: 16, color: onTap == null ? Colors.black26 : Colors.black87),
         ],
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

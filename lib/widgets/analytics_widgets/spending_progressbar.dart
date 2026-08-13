@@ -1,6 +1,7 @@
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// TODO: adjust this import path to match your project structure
 import 'package:expense_tracking/controllers/expenses_controller.dart';
 
 class SpendingCategoryCard extends StatelessWidget {
@@ -15,10 +16,14 @@ class SpendingCategoryCard extends StatelessWidget {
     final sortedEntries = categoryTotals.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
-    // Every bar's progress is relative to the top category, so the
-    // biggest spender always fills the bar completely — matches your
-    // original design where Shopping was visually the fullest.
-    final maxAmount = sortedEntries.isEmpty ? 1.0 : sortedEntries.first.value;
+    // Every bar's progress is now relative to TOTAL spending across all
+    // categories, not the top category. Food taking $50 out of $100
+    // total now shows a 50% bar, Transport at $20 shows 20%, Clothing
+    // at $15 shows 15%, and so on — the bars actually represent each
+    // category's real share of spending, instead of the top category
+    // always rendering as a full 100% bar by definition (which is what
+    // was looking wrong before).
+    final totalAmount = sortedEntries.fold<double>(0, (sum, e) => sum + e.value);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -28,28 +33,29 @@ class SpendingCategoryCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
               "Spending by category",
-              style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+              style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
           const SizedBox(height: 18),
           if (sortedEntries.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
                 "No spending yet this month",
-                style: TextStyle(color: Colors.black54, fontSize: 13),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 13),
               ),
             )
           else
             for (var i = 0; i < sortedEntries.length; i++) ...[
               _item(
                 sortedEntries[i].key,
-                sortedEntries[i].value / maxAmount,
+                totalAmount == 0 ? 0 : sortedEntries[i].value / totalAmount,
                 '\$${sortedEntries[i].value.toStringAsFixed(2)}',
+                context,
               ),
               if (i != sortedEntries.length - 1) const SizedBox(height: 14),
             ],
@@ -58,14 +64,21 @@ class SpendingCategoryCard extends StatelessWidget {
     );
   }
 
-  Widget _item(String title, double value, String amount) {
+  Widget _item(String title, double value, String amount, BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
-            Text(title, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
-            const Spacer(),
-            Text(amount, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.w600),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(amount, style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.onSurface)),
           ],
         ),
         const SizedBox(height: 6),

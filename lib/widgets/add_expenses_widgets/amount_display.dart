@@ -7,11 +7,19 @@ class AmountDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final String checkAmount = "0";
     return Column(
       children: [
-        Text(
-          "\$$amount",
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "\$$amount",
+            style: TextStyle(fontSize: 64, fontWeight: FontWeight.w700,
+            color:checkAmount == amount ? Colors.grey[400] : Theme.of(context).colorScheme.onSurface,
+            
+            ),
+          ),
         ),
       ],
     );
