@@ -61,11 +61,15 @@ class TransactionHistorySection extends StatelessWidget {
   Widget build(BuildContext context) {
     // If your ExpensesController exposes the raw list under a different
     // name (e.g. allTransactions), this is the one line to change.
-    final allTransactions = List<TransactionModel>.from(
-      context.watch<ExpensesController>().transactions,
-    )..sort((a, b) => b.date.compareTo(a.date));
-
-    final recent = allTransactions.take(maxItems).toList();
+    // No copy-and-re-sort here: the repository streams transactions
+    // already ordered by date, newest first, so we just take the first
+    // N. Sorting the whole list on every rebuild is what made the home
+    // screen janky as the history grows.
+    final recent = context
+        .watch<ExpensesController>()
+        .transactions
+        .take(maxItems)
+        .toList();
     final colorScheme = Theme.of(context).colorScheme;
 
     return Column(

@@ -16,21 +16,20 @@ class AddExpensesScreen extends StatefulWidget {
 }
 
 class _AddExpensesScreen extends State<AddExpensesScreen> {
-  // isExpense used to be a disconnected local field that never matched
-  // what ExpenseIncomeSwitch actually showed. It's gone now — the single
-  // source of truth is TransactionProvider.isExpense, read below.
   String amount = "0";
-
-  // Two separate category selections, because expense categories
-  // ("Food", "Transport"...) and income categories ("Salary", "Gift"...)
-  // are completely different lists — keeping one shared variable would
-  // let a leftover "Food" selection sneak into a saved income entry.
   String selectedCategory = "Food";
   String selectedIncomeCategory = "Salary";
   String selectedAccount = "Cash";
 
   TextEditingController titleController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+
+  // The actual fix: blocks a second _saveExpense() call from doing
+  // anything while the first one is still in flight. Without this,
+  // a fast double-tap runs the whole async function twice — two
+  // transactions get saved, and the screen gets popped twice, which
+  // crashes since the second pop() has nothing left to pop.
+  bool _isSaving = false;
 
   void _handleKeyPress(String key) {
     setState(() {
@@ -54,10 +53,6 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
     });
   }
 
-  /// Maps the plain-text account label your UI uses ("Cash"/"Bank"/"Card")
-  /// to the AccountType enum the model expects. Keeping this mapping in
-  /// one place means your UI can stay simple strings while your data
-  /// model stays type-safe.
   AccountType _accountFromLabel(String label) {
     switch (label.toLowerCase()) {
       case 'bank':
@@ -70,30 +65,26 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
   }
 
   Future<void> _saveExpense() async {
-    final parsedAmount = double.tryParse(amount) ?? 0;
+    // Guard checked FIRST and synchronously — if a save is already
+    // running, every subsequent call (from extra taps) exits here
+    // immediately, before touching Firestore or the navigator at all.
+    if (_isSaving) return;
 
-    // Guard against saving a $0 transaction, e.g. if the user taps
-    // Save Expense before entering anything on the number pad.
+    final parsedAmount = double.tryParse(amount) ?? 0;
     if (parsedAmount <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Enter an amount first")));
+      context.read<NotifyingProvider>().showMessage(
+        "Enter an amount first",
+        isError: true,
+      );
       return;
     }
 
-    // read(), not watch() — we're inside a callback, not build(), so we
-    // just need the current value once, not to rebuild on every toggle.
-    final isExpense = context.read<TransactionProvider>().isExpense;
+    setState(() => _isSaving = true);
 
-    // Pick the category from whichever list actually matches the
-    // transaction type — this is the bug fix: previously this always
-    // read selectedCategory, so an income entry could get saved with
-    // a leftover expense category like "Food".
+    final isExpense = context.read<TransactionProvider>().isExpense;
     final category = isExpense ? selectedCategory : selectedIncomeCategory;
 
     final transaction = TransactionModel(
-      // Firestore generates the real id when addTransaction() runs —
-      // this value is never actually sent, TransactionRepository ignores it.
       id: '',
       title: titleController.text.trim().isNotEmpty
           ? titleController.text.trim()
@@ -106,24 +97,34 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
       createdAt: DateTime.now(),
     );
 
-    await context.read<ExpensesController>().addExpenses(transaction);
+    try {
+      await context.read<ExpensesController>().addExpenses(transaction);
+    } catch (e) {
+      // Something actually failed (e.g. no network) — reset the guard
+      // so the user can retry, instead of the button staying stuck
+      // disabled forever.
+      if (mounted) {
+        setState(() => _isSaving = false);
+        context.read<NotifyingProvider>().showMessage(
+          "Couldn't save. Please try again.",
+          isError: true,
+        );
+      }
+      return;
+    }
 
-    // context used after an await — always re-check mounted first.
     if (!mounted) return;
 
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(content: Text(isExpense ? "Expense Saved" : "Income Saved")),
-    // );
-
-    context.read<NotifyingProvider>().showMessage(isExpense ? "Expense Saved" : "Income Saved");
+    context.read<NotifyingProvider>().showMessage(
+      isExpense ? "Expense Saved" : "Income Saved",
+    );
+    // No need to reset _isSaving here — pop() removes this screen
+    // entirely, so there's no button left to re-enable.
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    // watch() here so this screen rebuilds and swaps the form the instant
-    // the user taps the Expense/Income switch — same provider instance
-    // ExpenseIncomeSwitch itself reads.
     final isExpense = context.watch<TransactionProvider>().isExpense;
 
     return Scaffold(
@@ -151,7 +152,7 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
                   Text(
                     "Add Transaction",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 22,
                       fontWeight: FontWeight.w700,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -167,7 +168,7 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
                         amount: amount,
                         onKeyPressed: _handleKeyPress,
                         noteController: titleController,
-                        onSave: _saveExpense,
+                        onSave: _isSaving ? () {} : _saveExpense,
                         selectedCategory: selectedCategory,
                         onCategorySelected: (category) {
                           setState(() {
@@ -185,7 +186,7 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
                         amount: amount,
                         onKeyPressed: _handleKeyPress,
                         noteController: titleController,
-                        onSave: _saveExpense,
+                        onSave: _isSaving ? () {} : _saveExpense,
                         selectedCategory: selectedIncomeCategory,
                         onCategorySelected: (category) {
                           setState(() {
@@ -207,3 +208,15 @@ class _AddExpensesScreen extends State<AddExpensesScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,10 +1,11 @@
 import 'package:expense_tracking/models/saving_model.dart';
+import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracking/widgets/add_expenses_widgets/amount_display.dart';
 import 'package:expense_tracking/widgets/add_expenses_widgets/number_pad.dart';
-import 'package:expense_tracking/widgets/add_expenses_widgets/note_field.dart';
+
 
 class AddGoalContributionScreen extends StatefulWidget {
   final SavingsGoalModel goal;
@@ -42,11 +43,9 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
   Future<void> _saveContribution() async {
     final parsedAmount = double.tryParse(amount) ?? 0;
     if (parsedAmount <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Enter an amount first")));
-      return;
-    }
+      context.read<NotifyingProvider>().showMessage("Enter an amount first. ");
+  
+     }
 
     // Firestore's increment handles the math server-side — we don't
     // need to know the goal's current savedAmount to add to it.
@@ -56,13 +55,8 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
     );
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "Added \$${parsedAmount.toStringAsFixed(2)} to ${widget.goal.title}",
-        ),
-      ),
-    );
+    context.read<NotifyingProvider>().showMessage("Added \$${parsedAmount.toStringAsFixed(2)} to ${widget.goal.title}");
+    
     Navigator.of(context).pop();
   }
 
@@ -91,9 +85,10 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
                   Expanded(
                     child: Text(
                       goal.title,
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 28,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -114,8 +109,8 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
                   children: [
                     AmountDisplay(amount: amount),
                     const SizedBox(height: 20),
-                    NoteField(controller: noteController),
-                    const SizedBox(height: 20),
+                    // NoteField(controller: noteController),
+                    // const SizedBox(height: 20),
                     NumberPad(onKeyPressed: _handleKeyPress),
                     const SizedBox(height: 20),
                     Padding(

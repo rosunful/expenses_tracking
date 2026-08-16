@@ -1,7 +1,10 @@
 // NOTE: assumed path — adjust if TransactionProvider lives elsewhere
 // (it's the class with selectExpense()/selectIncome() you shared).
+import 'package:expense_tracking/controllers/note_screen.dart';
+import 'package:expense_tracking/models/category_model.dart';
 import 'package:expense_tracking/providers/transaction_provider.dart';
 import 'package:expense_tracking/screens/add_expenses_screen.dart';
+import 'package:expense_tracking/screens/manage_category_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,13 +46,12 @@ class AddingExpenseSection extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: _ActionButton(
-            icon: Icons.swap_horiz,
-            label: "Transfer",
+            icon: Icons.category_outlined,
+            label: "Manage\nCategory",
             onTap: () {
-              // No transfer screen yet — swap this for a real
-              // Navigator.push once you build one.
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Transfers are coming soon')),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ManageCategoriesScreen(type: CategoryType.income,)),
               );
             },
           ),
@@ -57,13 +59,11 @@ class AddingExpenseSection extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: _ActionButton(
-            icon: Icons.qr_code_scanner,
-            label: "Scan",
+            icon: Icons.note_add_outlined,
+            label: "Note\nAdd",
             onTap: () {
-              // No receipt-scan screen yet — same as above.
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Receipt scanning is coming soon')),
-              );
+              Navigator.push(context, 
+              MaterialPageRoute(builder: (context) => const  NoteScreen()));
             },
           ),
         ),

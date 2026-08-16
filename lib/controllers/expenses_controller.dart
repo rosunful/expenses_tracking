@@ -10,6 +10,12 @@ class ExpensesController extends ChangeNotifier {
   List<TransactionModel> _expenses = [];
   StreamSubscription<List<TransactionModel>>? _subscription;
 
+  // Cached aggregates — recomputed ONCE per Firestore snapshot instead of
+  // being re-scanned by every widget that reads them each frame.
+  double _totalExpenses = 0;
+  double _totalIncome = 0;
+  Map<String, double> _categoryTotals = const {};
+
   List<TransactionModel> get expensesNoPrivate => _expenses;
 
   /// The complete, live transaction list.
@@ -30,8 +36,29 @@ class ExpensesController extends ChangeNotifier {
   void _listenToTransactions() {
     _subscription = _repository.streamTransactions().listen((transactions) {
       _expenses = transactions;
+      _recomputeCaches();
       notifyListeners();
     });
+  }
+
+  /// One pass over the list a single time per snapshot, so getters like
+  /// [totalExpenses] cost O(1) per read instead of re-scanning everything
+  /// on every widget rebuild.
+  void _recomputeCaches() {
+    double totalExpense = 0;
+    double totalIncome = 0;
+    final Map<String, double> totals = {};
+    for (final e in _expenses) {
+      if (e.type == TransactionType.expense) {
+        totalExpense += e.amount;
+        totals[e.category] = (totals[e.category] ?? 0) + e.amount;
+      } else {
+        totalIncome += e.amount;
+      }
+    }
+    _totalExpenses = totalExpense;
+    _totalIncome = totalIncome;
+    _categoryTotals = totals;
   }
 
   /// Was synchronous before (just added to a local list). Now it's async
@@ -50,27 +77,11 @@ class ExpensesController extends ChangeNotifier {
   /// Only sums transactions where type == expense, so income entries
   /// (like "Freelance payment" or "Salary" from your screenshots)
   /// don't inflate this number.
-  double get totalExpenses {
-    double total = 0;
-    for (final e in _expenses) {
-      if (e.type == TransactionType.expense) {
-        total += e.amount;
-      }
-    }
-    return total;
-  }
+  double get totalExpenses => _totalExpenses;
 
   /// Mirrors totalExpenses, but for income entries — needed for the
   /// "Income vs Expense" bar chart on your Analytics screen.
-  double get totalIncome {
-    double total = 0;
-    for (final e in _expenses) {
-      if (e.type == TransactionType.income) {
-        total += e.amount;
-      }
-    }
-    return total;
-  }
+  double get totalIncome => _totalIncome;
 
   List<TransactionModel> filterCategory(String targetCategory) {
     return _expenses
@@ -80,14 +91,7 @@ class ExpensesController extends ChangeNotifier {
 
   /// Same expense-only filtering here, for your "Spending by category"
   /// analytics screen.
-  Map<String, double> get categoryTotals {
-    final Map<String, double> totals = {};
-    for (final e in _expenses) {
-      if (e.type != TransactionType.expense) continue;
-      totals[e.category] = (totals[e.category] ?? 0) + e.amount;
-    }
-    return totals;
-  }
+  Map<String, double> get categoryTotals => _categoryTotals;
 
   /// Sums expense transactions for one category, counting only those
   /// on or after [since]. This is what powers each budget's progress bar:

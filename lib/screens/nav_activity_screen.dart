@@ -54,7 +54,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     final allTransactions = context.watch<ExpensesController>().expensesNoPrivate;
     final visibleTransactions = _applyFilters(allTransactions);
 
-    return Scaffold(
+    return Scaffold(      
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -111,11 +111,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          for (final tx in visibleTransactions) _transactionTile(tx),
-                        ],
-                      ),
+                      // Eagerly building every transaction row inside a Column creates a
+                    // widget for every entry on every rebuild, which is what
+                    // makes this list chug as the history grows. ListView.
+                    // builder only builds the handful of rows actually on
+                    // screen.
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: visibleTransactions.length,
+                      itemBuilder: (context, index) =>
+                          _transactionTile(visibleTransactions[index]),
+                    ),
                     ),
                   ),
               ],
@@ -211,3 +218,4 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 }
+

@@ -1,6 +1,7 @@
 import 'package:expense_tracking/models/category_model.dart';
 import 'package:expense_tracking/providers/category_provider.dart';
 import 'package:expense_tracking/screens/manage_category_screen.dart';
+import 'package:expense_tracking/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,11 +14,18 @@ class CategoryChipPicker extends StatelessWidget {
   final String selectedCategory;
   final ValueChanged<String> onSelected;
 
-  /// How many chips to show before collapsing the rest behind "More".
-  /// There's no reliable way to measure "exactly two rows" without
-  /// knowing chip widths ahead of time, so this is a tuned approximation —
-  /// adjust up/down if it looks off on your actual device/screen size.
-  static const int _maxVisibleChips = 7;
+  /// Built-in categories are always ALL shown, in their fixed order —
+  /// there's usually only 6–8 of them, and reordering or hiding any of
+  /// them would be confusing since they're meant to be a stable,
+  /// predictable set.
+  ///
+  /// This constant only caps how many CUSTOM (user-added) categories
+  /// show before the rest collapse behind "More".
+  static const int _maxVisibleCustomChips = 0;
+
+  /// Caps how wide a single chip can get before its text truncates —
+  /// this is the actual overflow fix, paired with Flexible below.
+  static const double _maxChipWidth = 150;
 
   const CategoryChipPicker({
     super.key,
@@ -32,29 +40,14 @@ class CategoryChipPicker extends StatelessWidget {
     );
   }
 
-  /// "More" opens a centered dialog showing every category as a
-  /// scrollable wrap — for SELECTING one, as opposed to Manage
-  /// Categories, which is for ADDING/DELETING. Tapping a chip here both
-  /// selects it and closes the dialog.
-  ///
-  /// A dialog instead of a bottom sheet: bottom sheets size themselves
-  /// to their content by default with no height cap, so a long list of
-  /// categories could extend past the visible screen with nothing to
-  /// scroll it into view. Capping this dialog's height and wrapping the
-  /// Wrap in a SingleChildScrollView means it never gets cut off — it
-  /// just scrolls internally instead.
   void _openAllCategoriesSheet(BuildContext context, List<CategoryModel> all) {
     showDialog(
       context: context,
       builder: (dialogContext) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(dialogContext).size.height * 0.6,
-            ),
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(dialogContext).size.height * 0.6),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -72,8 +65,7 @@ class CategoryChipPicker extends StatelessWidget {
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-
-                      _chip2('+ Add New', false, () {
+                      _actionChip('+ Add New', () {
                         Navigator.of(dialogContext).pop();
                         _openManageCategories(context);
                       }),
@@ -87,14 +79,10 @@ class CategoryChipPicker extends StatelessWidget {
                         runSpacing: 8,
                         children: [
                           for (final category in all)
-                            _chip(
-                              category.name,
-                              category.name == selectedCategory,
-                              () {
-                                onSelected(category.name);
-                                Navigator.of(dialogContext).pop();
-                              },
-                            ),
+                            _categoryChip(category, category.name == selectedCategory, () {
+                              onSelected(category.name);
+                              Navigator.of(dialogContext).pop();
+                            }),
                         ],
                       ),
                     ),
@@ -111,10 +99,33 @@ class CategoryChipPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allCategories = context.watch<CategoryProvider>().categoriesFor(type);
-    final hasMore = allCategories.length > _maxVisibleChips;
-    final visibleCategories = hasMore
-        ? allCategories.take(_maxVisibleChips).toList()
-        : allCategories;
+
+    // Split into built-ins (always shown, fixed order) and custom ones
+    // (limited, with the currently-selected one guaranteed visible).
+    final defaults = allCategories.where((c) => c.isDefault).toList();
+    final customs = allCategories.where((c) => !c.isDefault).toList();
+
+    final hasMoreCustoms = customs.length > _maxVisibleCustomChips;
+
+    List<CategoryModel> visibleCustoms;
+    if (!hasMoreCustoms) {
+      visibleCustoms = customs;
+    } else {
+      // If the selected category is a custom one that would otherwise
+      // be hidden, pin it into the visible slice — appended right
+      // after the built-ins, not shuffled ahead of them.
+      final selectedCustomMatch = customs.where((c) => c.name == selectedCategory);
+      if (selectedCustomMatch.isNotEmpty) {
+        final selected = selectedCustomMatch.first;
+        final others = customs
+            .where((c) => c.name != selected.name)
+            .take(_maxVisibleCustomChips)
+            .toList();
+        visibleCustoms = [selected, ...others];
+      } else {
+        visibleCustoms = customs.take(_maxVisibleCustomChips).toList();
+      }
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +137,7 @@ class CategoryChipPicker extends StatelessWidget {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface ,
+              color: Theme.of(context).colorScheme.onSurface,
               letterSpacing: 0.7,
             ),
           ),
@@ -135,76 +146,88 @@ class CategoryChipPicker extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (final category in visibleCategories)
-              _chip(
-                category.name,
-                category.name == selectedCategory,
-                () => onSelected(category.name),
-              ),
-            // "More" now visually distinct from a regular category chip
-            // — outlined instead of filled, with an icon, so it reads
-            // as an action rather than another option in the list.
-            if (hasMore) _moreChip(context, allCategories),
-           
+            // Built-ins first, always all of them, always this order.
+            for (final category in defaults)
+              _categoryChip(category, category.name == selectedCategory, () => onSelected(category.name)),
+            // Then a capped set of custom categories, right after.
+            for (final category in visibleCustoms)
+              _categoryChip(category, category.name == selectedCategory, () => onSelected(category.name)),
+            if (hasMoreCustoms) _moreChip(context, allCategories),
           ],
         ),
       ],
     );
   }
 
-  Widget _chip(String label, bool isSelected, VoidCallback onTap) {
+  /// Every category chip shows its icon next to the name — same
+  /// resolveCategoryIcon used in Manage Categories, so what you see
+  /// here matches what you'll recognize later on transaction lists.
+  ///
+  /// The overflow fix: the chip's width is capped (_maxChipWidth), and
+  /// the Text sits inside a Flexible with maxLines: 1 and
+  /// TextOverflow.ellipsis. Flexible is what actually grants the Row
+  /// permission to shrink that child instead of demanding its full
+  /// natural width — without it, a long name has nowhere to go and the
+  /// Row overflows, which is exactly the crash you saw.
+  Widget _categoryChip(CategoryModel category, bool isSelected, VoidCallback onTap) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF1C6B47) : const Color(0xffE9EEEA),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 11,
-            color: isSelected ? Colors.white : Colors.black87,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: _maxChipWidth),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFF1C6B47) : const Color(0xffE9EEEA),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                resolveCategoryIcon(category),
+                size: 14,
+                color: isSelected ? Colors.white : const Color(0xFF1C6B47),
+              ),
+              const SizedBox(width: 5),
+              Flexible(
+                child: Text(
+                  category.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                    color: isSelected ? Colors.white : Colors.black87,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-   Widget _chip2(String label, bool isSelected, VoidCallback onTap) {
+  Widget _actionChip(String label, VoidCallback onTap) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(164, 220, 220, 220),
+          color: const Color(0xffE9EEEA),
+          border: Border.all(color: const Color.fromARGB(98, 171, 210, 193), width: 0.9),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            width: 0.1,
-            color: Colors.black,
-            style: BorderStyle.solid
-          )     
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 11,
-            color: Colors.black,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 11, color: Colors.black),
         ),
       ),
     );
   }
 
-  /// Deliberately different from _chip's filled style — an outlined
-  /// pill with a small icon, so "there are more options hiding here"
-  /// reads as its own kind of control rather than blending in with the
-  /// actual category choices.
   Widget _moreChip(BuildContext context, List<CategoryModel> all) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
@@ -212,24 +235,16 @@ class CategoryChipPicker extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: const Color(0xffE9EEEA),
           border: Border.all(color: const Color.fromARGB(98, 171, 210, 193), width: 0.9),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Row(
+        child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.expand_more_rounded, size: 14, color: Color.fromARGB(182, 33, 113, 77)),
-            const SizedBox(width: 3),
-            Text(
-              'More',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 11,
-                color: Theme.of(context).colorScheme.onSurface
-                
-              ),
-            ),
+            Icon(Icons.expand_more_rounded, size: 14, color: Color.fromARGB(182, 33, 113, 77)),
+            SizedBox(width: 3),
+            Text('More', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11, color: Colors.black)),
           ],
         ),
       ),

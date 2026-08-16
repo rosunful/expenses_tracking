@@ -28,10 +28,11 @@ class ExpensesChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
       children: [
-        Text(
-          "Analytics",
-          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color:Theme.of(context).colorScheme.onSurface),
-        ),
+         Text(
+                  "Transaction",
+                  style: TextStyle(fontWeight: FontWeight.bold, color:Theme.of(context).colorScheme.onSurface , fontSize: 26),
+                ),
+       
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(

@@ -9,9 +9,10 @@ class AnalyticsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       
+      
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(12,4,12,0),
           child: Column(
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,

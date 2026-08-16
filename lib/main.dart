@@ -7,6 +7,7 @@ import 'package:expense_tracking/providers/reminder_provider.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
 import 'package:expense_tracking/providers/transaction_provider.dart';
 import 'package:expense_tracking/screens/starting_onboard.dart';
+import 'package:expense_tracking/theme/app_navigation.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/theme/app_theme_notifier.dart';
 import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottom_nav_bar.dart';
@@ -31,7 +32,6 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ReminderProvider()),
         ChangeNotifierProvider(create: (_) => SavingsGoalProvider()),
         ChangeNotifierProvider(create: (_) => NotifyingProvider()),
-
       ],
       child: const App(),
     ),
@@ -52,6 +52,7 @@ class App extends StatelessWidget {
       darkTheme: AppTheme.dark,
       themeMode: themeNotifier.themeMode,
       themeAnimationDuration: Duration.zero,
+      navigatorKey: appNavigatorKey, 
       home: const StartingOnboard(),
     );
   }

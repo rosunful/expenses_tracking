@@ -1,7 +1,6 @@
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// TODO: adjust this import path to match your project structure
 import 'package:expense_tracking/controllers/expenses_controller.dart';
 
 class SpendingCategoryCard extends StatelessWidget {

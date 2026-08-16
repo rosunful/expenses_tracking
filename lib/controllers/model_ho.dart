@@ -1,17 +1,21 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
- final String valuesJsonType = '''
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final String valuesJsonType = '''
     {"name" : "justin", 
     "releaseYear" : 2016,
     "superHit" : true ,
@@ -27,7 +31,6 @@ class MyApp extends StatelessWidget {
     viewsCount: 1000,
   );
 
-
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> encode = valuesObjType.toMap();
@@ -37,15 +40,9 @@ class MyApp extends StatelessWidget {
     Map<String, dynamic> decoded = jsonDecode(valuesJsonType);
     JB obj = JB.fromMap(decoded);
 
-    return MaterialApp(home: Scaffold(
-      body: 
-      Column(
-        children: [
-          Text(encoded),
-          Text(obj.name)
-        ],
-      ),
-    ));
+    return MaterialApp(
+      home: Scaffold(body: Column(children: [Text(encoded), Text(obj.name)])),
+    );
   }
 }
 

@@ -9,7 +9,7 @@ class NoteField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      style: const TextStyle(fontSize: 12),
+      style: const TextStyle(fontSize: 12 , color: Colors.black),
       decoration: InputDecoration(
         hintText: "Add note (optional)",
         hintStyle: const TextStyle(fontSize: 11, color: Colors.black38),
@@ -18,6 +18,7 @@ class NoteField extends StatelessWidget {
           horizontal: 12,
           vertical: 11,
         ),
+        
 
         filled: true,
         fillColor: const Color(0xFFF1F5F2),

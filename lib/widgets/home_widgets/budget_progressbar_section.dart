@@ -1,5 +1,6 @@
 import 'package:expense_tracking/controllers/expenses_controller.dart';
 import 'package:expense_tracking/models/budgets_model.dart';
+import 'package:expense_tracking/models/transaction_model.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
 import 'package:expense_tracking/screens/budgets_palnner_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
@@ -82,20 +83,35 @@ class _MostUrgentBudget extends StatelessWidget {
     // The home screen only has room for one budget, so we surface
     // whichever one is closest to (or over) its limit — that's the
     // one most worth the user's attention right now.
+
+    // Single pass over the transaction list: remember each budget's
+    // period reset date, then sum every expense into its category in one
+    // loop. Calling spentForCategorySince() per budget used to re-scan
+    // the whole list for every budget on every rebuild (O(budgets × txs)).
+    final startByCategory = <String, DateTime>{
+      for (final b in budgets) b.category: periodStartFor(b.period),
+    };
+    final spent = <String, double>{};
+    for (final e in expenses.transactions) {
+      if (e.type != TransactionType.expense) continue;
+      final start = startByCategory[e.category];
+      if (start == null || e.date.isBefore(start)) continue;
+      spent[e.category] = (spent[e.category] ?? 0) + e.amount;
+    }
+
     BudgetModel? topBudget;
     double topRatio = -1;
     double topSpent = 0;
 
     for (final budget in budgets) {
-      final spent = expenses.spentForCategorySince(
-        budget.category,
-        periodStartFor(budget.period),
-      );
-      final ratio = budget.targetAmount == 0 ? 0 : spent / budget.targetAmount;
+      final spentForCategory = spent[budget.category] ?? 0;
+      final ratio = budget.targetAmount == 0
+          ? 0
+          : spentForCategory / budget.targetAmount;
       if (ratio > topRatio) {
         topRatio = ratio.toDouble();
         topBudget = budget;
-        topSpent = spent;
+        topSpent = spentForCategory;
       }
     }
 

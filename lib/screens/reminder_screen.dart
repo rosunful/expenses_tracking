@@ -1,4 +1,5 @@
 import 'package:expense_tracking/models/reminder_model.dart';
+import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/providers/reminder_provider.dart';
 import 'package:expense_tracking/widgets/add_income_widgets/category_chip_picker.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +46,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
   Future<void> _submit() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a title')),
-      );
+      context.read<NotifyingProvider>().showMessage("Enter a title .");
       return;
     }
 
@@ -55,16 +54,13 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     if (_isRecurringMonthly) {
       dayOfMonth = int.tryParse(_dayOfMonthController.text.trim());
       if (dayOfMonth == null || dayOfMonth < 1 || dayOfMonth > 31) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Enter a valid day of month (1–31)')),
-        );
+        context.read<NotifyingProvider>().showMessage("Enter a valid day of month (1–31)");
+
         return;
       }
     } else if (_oneOffDueDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pick a due date')),
-      );
-      return;
+       context.read<NotifyingProvider>().showMessage("Pick a due date");
+      
     }
 
     final reminder = ReminderModel(

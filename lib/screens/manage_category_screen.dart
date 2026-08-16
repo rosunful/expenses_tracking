@@ -9,6 +9,71 @@ import 'package:expense_tracking/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+
+  Future<String?> _pickCategoryIcon(BuildContext context, {String? currentKey}) {
+  return showDialog<String>(
+    context: context,
+    builder: (dialogContext) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(dialogContext).size.height * 0.6),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Choose an icon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(height: 14),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: categoryIconLibrary.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                      ),
+                      itemBuilder: (context, index) {
+                        final entry = categoryIconLibrary.entries.elementAt(index);
+                        final isSelected = entry.key == currentKey;
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () => Navigator.of(dialogContext).pop(entry.key),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? const Color(0xFF1C6B47)
+                                  : const Color(0xFF1C6B47).withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              entry.value,
+                              size: 20,
+                              color: isSelected ? Colors.white : const Color(0xFF1C6B47),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
 class ManageCategoriesScreen extends StatefulWidget {
   final CategoryType type;
   const ManageCategoriesScreen({super.key, required this.type});
@@ -21,6 +86,10 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   final TextEditingController _newCategoryController = TextEditingController();
   final FocusNode _newCategoryFocusNode = FocusNode();
   bool _isAdding = false;
+
+
+  //FOR ADDING CATEGORY
+    String _selectedIconKey = 'category';
 
   @override
   void dispose() {
@@ -96,7 +165,12 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     });
   }
 
-
+  ///ADDING CATEGORY IN THE SCREEN 
+  ///
+  Future<void> _pickIconForNewCategory() async {
+    final key = await _pickCategoryIcon(context, currentKey: _selectedIconKey);
+    if (key != null) setState(() => _selectedIconKey = key);
+  }
 
 
   Future<void> _addCategory() async {
@@ -108,6 +182,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     final added = await context.read<CategoryProvider>().addCategory(
       name,
       widget.type,
+      iconKey: _selectedIconKey,
     );
 
     if (!mounted) return;
@@ -123,7 +198,16 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     // Straight back to the field so the next category can be typed
     // immediately, without tapping back into it — useful when adding
     // several in a row.
+    setState(() => _selectedIconKey = 'category'); // reset for the next one
     _newCategoryFocusNode.requestFocus();
+  }
+
+
+    Future<void> _changeIcon(CategoryModel category) async {
+    final key = await _pickCategoryIcon(context, currentKey: category.iconKey);
+    if (key == null || !mounted) return;
+    await context.read<CategoryProvider>().updateCategoryIcon(category.id, key);
+    if (mounted) _throwMessageFromTop('Icon updated');
   }
 
   /// How many existing records already use this category — this is
@@ -313,33 +397,34 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 16),
                     // Grid for built-ins — they're fixed, unchangeable,
                     // and there's usually only a handful, so a compact
                     // grid reads as "reference info" rather than a list
                     // of things you can act on (which the custom ones
                     // below actually are).
-                    GridView.builder(
+                    GridView.builder(                      
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: defaults.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 4,
-                            mainAxisSpacing: 12,
+                            mainAxisSpacing: 0,
                             crossAxisSpacing: 8,
-                            childAspectRatio: 0.78,
+                            childAspectRatio: .90,
+
                           ),
                       itemBuilder: (context, index) =>
                           _DefaultCategoryTile(category: defaults[index]),
                     ),
-                    const SizedBox(height: 22),
+                    // const SizedBox(height: 0),
                     Text(
                       'YOUR CATEGORIES (${custom.length})',
                       style: TextStyle(
                         fontSize: 10,
                         letterSpacing: .7,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
@@ -347,11 +432,13 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                     if (custom.isEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          "You haven't added any custom categories yet.",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.onSurface,
+                        child: Center(
+                          child: Text(
+                            "You haven't added any custom categories yet.",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                           ),
                         ),
                       )
@@ -361,6 +448,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                           category: category,
                           onRename: () => _renameCategory(category),
                           onDelete: () => _confirmDelete(category),
+                          onChangeIcon: () => _changeIcon(category),
                         ),
                         const SizedBox(height: 10),
                       ],
@@ -380,6 +468,20 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: _isAdding ? null : _pickIconForNewCategory,
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1C6B47).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(iconFromKey(_selectedIconKey), size: 20, color: const Color(0xFF1C6B47)),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       style: TextStyle(color: Colors.black),
@@ -468,11 +570,13 @@ class _DefaultCategoryTile extends StatelessWidget {
             color: const Color(0xFF1C6B47).withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            iconForCategory(category.name),
-            size: 20,
-            color: context.appColors.balanceCardBackground,
-          ),
+           child: Icon(resolveCategoryIcon(category), size: 20, color: const Color(0xFF1C6B47)),
+  
+          // child: Icon(
+          //   iconForCategory(category.name),
+          //   size: 20,
+          //   color: context.appColors.balanceCardBackground,
+          // ),
         ),
         const SizedBox(height: 6),
         Text(
@@ -493,11 +597,13 @@ class _CustomCategoryRow extends StatelessWidget {
   final CategoryModel category;
   final VoidCallback onRename;
   final VoidCallback onDelete;
+  final VoidCallback onChangeIcon;
 
   const _CustomCategoryRow({
     required this.category,
     required this.onRename,
     required this.onDelete,
+     required this.onChangeIcon,
   });
 
   @override
@@ -509,7 +615,7 @@ class _CustomCategoryRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -521,11 +627,12 @@ class _CustomCategoryRow extends StatelessWidget {
           width: 38,
           height: 38,
           decoration: BoxDecoration(
-            color: const Color(0xFF1C6B47).withOpacity(0.1),
+            color: const Color(0xFF1C6B47).withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
-            iconForCategory(category.name),
+             resolveCategoryIcon(category),
+            // iconForCategory(category.name),
             size: 18,
             color: context.appColors.balanceCardBackground,
           ),
