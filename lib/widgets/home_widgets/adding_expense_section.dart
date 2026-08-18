@@ -1,6 +1,6 @@
 // NOTE: assumed path — adjust if TransactionProvider lives elsewhere
 // (it's the class with selectExpense()/selectIncome() you shared).
-import 'package:expense_tracking/controllers/note_screen.dart';
+import 'package:expense_tracking/screens/note_screen.dart';
 import 'package:expense_tracking/models/category_model.dart';
 import 'package:expense_tracking/providers/transaction_provider.dart';
 import 'package:expense_tracking/screens/add_expenses_screen.dart';

@@ -1,3 +1,19 @@
+
+
+
+
+import 'package:expense_tracking/controllers/expenses_controller.dart';
+import 'package:expense_tracking/providers/auth_provider.dart';
+import 'package:expense_tracking/providers/budgets_provider.dart';
+import 'package:expense_tracking/providers/category_provider.dart';
+import 'package:expense_tracking/providers/notifying_provider.dart';
+import 'package:expense_tracking/providers/reminder_provider.dart';
+import 'package:expense_tracking/providers/saving_goal_provider.dart';
+import 'package:expense_tracking/providers/transaction_provider.dart';
+import 'package:expense_tracking/repositories/currency_repository.dart';
+import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottom_nav_bar.dart';
+import 'package:expense_tracking/theme/app_theme_notifier.dart';
+
 import 'package:expense_tracking/screens/nav_activity_screen.dart';
 import 'package:expense_tracking/screens/add_expenses_screen.dart';
 import 'package:expense_tracking/screens/nav_analytics_screen.dart';
@@ -5,8 +21,42 @@ import 'package:expense_tracking/screens/nav_home_screen.dart';
 import 'package:expense_tracking/screens/nav_profile_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracking/widgets/nav_bar_widgets/custom_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+
+void main() {
+  runApp(
+     MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BottomNav()),
+        ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider(create: (_) => ExpensesController()),
+        ChangeNotifierProvider(create: (_) => TransactionProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => BudgetProvider()),
+        ChangeNotifierProvider(create: (_) => ReminderProvider()),
+        ChangeNotifierProvider(create: (_) => SavingsGoalProvider()),
+        ChangeNotifierProvider(create: (_) => NotifyingProvider()),
+        ChangeNotifierProvider(create: (_) => CurrencyProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: Scaffold(body: LandingPage()));
+  }
+}
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});

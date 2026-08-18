@@ -1,7 +1,9 @@
-import 'package:expense_tracking/controllers/note_screen.dart';
+import 'package:expense_tracking/screens/note_screen.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
+import 'package:expense_tracking/screens/about_us_screen.dart';
 import 'package:expense_tracking/screens/bills_subscription_screen.dart';
 import 'package:expense_tracking/screens/manage_category_screen.dart';
+import 'package:expense_tracking/screens/report_screen.dart';
 import 'package:expense_tracking/screens/saving_goal_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/screens/budgets_palnner_screen.dart';
@@ -222,9 +224,16 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       spacing: 20,
                       children: [
-                        // Not built yet — intentionally left without
-                        // onTap for now, per your call to leave these two.
-                        const _ProfileRow(label: 'Wallet & Accounts'),
+
+                         _ProfileRow(
+                          label: 'Create Notes',
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const NoteScreen(),
+                            ),
+                          ),
+                        ),
+                        
 
                         _ProfileRow(
                           label: 'Budget Planner',
@@ -244,21 +253,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
 
-                        _ProfileRow(
-                          label: 'Bills & Subscription',
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const BillsSubscriptionsScreen(),
-                            ),
-                          ),
-                        ),
-
-                        // Reminders and Bills & Subscriptions are the
-                        // same underlying feature (ReminderProvider
-                        // covers Bill/EMI/Task together) — both rows
-                        // point at the same screen rather than
-                        // duplicating it. Say the word if you want
-                        // these split into two distinct screens instead.
+              
                         _ProfileRow(
                           label: 'Reminders',
                           onTap: () => Navigator.of(context).push(
@@ -268,26 +263,29 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
 
-                        // Now wired — opens a chooser first since
-                        // categories are split by type (Expense/Income/
-                        // Reminder).
                         _ProfileRow(
                           label: 'Manage Categories',
                           onTap: () => _openCategoryChooser(context),
                         ),
 
-                        // Not built yet.
-                        const _ProfileRow(label: 'Security & Privacy'),
 
+                       
                         _ProfileRow(
-                          label: 'Create Notes',
+                          label: 'About Us',
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => const NoteScreen(),
+                              builder: (_) => const AboutUsScreen(),
                             ),
                           ),
                         ),
-                       
+                        _ProfileRow(
+                          label: 'Report Us',
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const ReportProblemScreen(),
+                            ),
+                          ),
+                        ),               
                       
                       ],
                     ),

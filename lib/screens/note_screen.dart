@@ -1,7 +1,7 @@
 import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/screens/adding_note_screen.dart';
 import 'package:expense_tracking/controllers/database_controller.dart';
-import 'package:expense_tracking/controllers/updating_note_screen.dart';
+import 'package:expense_tracking/screens/updating_note_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
