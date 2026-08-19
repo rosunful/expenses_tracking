@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracking/models/budgets_model.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
-import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
+import 'package:expense_tracking/controllers/budget_period_controller.dart';
 import 'package:expense_tracking/controllers/expenses_controller.dart';
 import 'package:expense_tracking/providers/category_provider.dart';
 import 'package:expense_tracking/models/category_model.dart';

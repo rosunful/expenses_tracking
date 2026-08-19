@@ -570,7 +570,7 @@ class _DefaultCategoryTile extends StatelessWidget {
             color: const Color(0xFF1C6B47).withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-           child: Icon(resolveCategoryIcon(category), size: 20, color: const Color(0xFF1C6B47)),
+           child: Icon(resolveCategoryIcon(category), size: 20, color:  context.appColors.balanceCardBackground.withValues(alpha: 0.5)),
   
           // child: Icon(
           //   iconForCategory(category.name),

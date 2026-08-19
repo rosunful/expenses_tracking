@@ -188,7 +188,7 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                                 : Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                             child: InkWell(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(10),
                               onTap: () => _select(currency),
                               splashColor: const Color(0xFF1C6B47).withOpacity(0.1),
                               highlightColor: const Color(0xFF1C6B47).withOpacity(0.05),
@@ -206,8 +206,8 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                                       decoration: BoxDecoration(
                                         color: isSelected
                                             ? const Color(0xFF1C6B47)
-                                            : const Color(0xFFF1F5F2),
-                                        borderRadius: BorderRadius.circular(12),
+                                            : Theme.of(context).colorScheme.primary,
+                                        borderRadius: BorderRadius.circular(19),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -217,7 +217,7 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                                             fontWeight: FontWeight.w600,
                                             color: isSelected
                                                 ? Colors.white
-                                                : Colors.black87,
+                                                : Colors.white,
                                           ),
                                         ),
                                       ),
@@ -247,7 +247,7 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                                             currency.code,
                                             style: TextStyle(
                                               fontSize: 13,
-                                              color: Colors.grey.shade600,
+                                              color: isSelected ? Colors.black54 :  Colors.grey.shade600,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -269,20 +269,20 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                                         child: const Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Icon(
-                                              Icons.check_circle,
-                                              color: Colors.white,
-                                              size: 16,
-                                            ),
-                                            SizedBox(width: 4),
-                                            // Text(
-                                            //   'Selected',
-                                            //   style: TextStyle(
-                                            //     color: Colors.white,
-                                            //     fontSize: 11,
-                                            //     fontWeight: FontWeight.w600,
-                                            //   ),
+                                            // Icon(
+                                            //   Icons.check_circle,
+                                            //   color: Colors.white,
+                                            //   size: 16,
                                             // ),
+                                            // SizedBox(width: 4),
+                                            Text(
+                                              'Selected',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       )

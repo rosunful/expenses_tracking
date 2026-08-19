@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracking/models/transaction_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 /// Talks directly to Firestore for everything under
 /// users/{uid}/transactions. Nothing else in the app should call
 /// FirebaseFirestore.instance for transactions directly — it all
@@ -62,21 +61,13 @@ class TransactionRepository {
     return _transactionsRef
         .orderBy('date', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => TransactionModel.fromMap(doc.id, doc.data()))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => TransactionModel.fromMap(doc.id, doc.data()))
+              .toList(),
+        );
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

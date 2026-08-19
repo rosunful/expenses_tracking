@@ -1,11 +1,11 @@
 import 'package:expense_tracking/screens/landing_page.dart';
 import 'package:expense_tracking/screens/login_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
-import 'package:expense_tracking/widgets/onboard_pages/container1.dart';
-import 'package:expense_tracking/widgets/onboard_pages/container2.dart';
-import 'package:expense_tracking/widgets/onboard_pages/container3.dart';
-import 'package:expense_tracking/widgets/onboard_pages/container4.dart';
-import 'package:expense_tracking/widgets/onboard_pages/container5.dart';
+import 'package:expense_tracking/widgets/onboard_pages_widgets/container1.dart';
+import 'package:expense_tracking/widgets/onboard_pages_widgets/container2.dart';
+import 'package:expense_tracking/widgets/onboard_pages_widgets/container3.dart';
+import 'package:expense_tracking/widgets/onboard_pages_widgets/container4.dart';
+import 'package:expense_tracking/widgets/onboard_pages_widgets/container5.dart';
 import 'package:expense_tracking/widgets/onboard_widgets/next_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

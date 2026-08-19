@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:expense_tracking/models/budgets_model.dart';
 import 'package:expense_tracking/repositories/budgets_repository.dart';
-import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
+import 'package:expense_tracking/controllers/budget_period_controller.dart';
 
 class BudgetProvider extends ChangeNotifier {
   final BudgetRepository _repository = BudgetRepository();

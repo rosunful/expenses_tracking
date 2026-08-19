@@ -1,4 +1,4 @@
-import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
+import 'package:expense_tracking/controllers/budget_period_controller.dart';
 
 class BudgetModel {
   final String id;

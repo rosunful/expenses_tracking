@@ -4,7 +4,7 @@ import 'package:expense_tracking/models/transaction_model.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
 import 'package:expense_tracking/screens/budgets_palnner_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
-import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
+import 'package:expense_tracking/controllers/budget_period_controller.dart';
 import 'package:expense_tracking/widgets/home_widgets/currency_foramatter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

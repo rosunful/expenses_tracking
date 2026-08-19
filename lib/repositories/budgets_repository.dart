@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:expense_tracking/models/budgets_model.dart';
-import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
+import 'package:expense_tracking/controllers/budget_period_controller.dart';
 
 class BudgetRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;

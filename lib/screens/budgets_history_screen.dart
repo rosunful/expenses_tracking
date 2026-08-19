@@ -1,4 +1,4 @@
-import 'package:expense_tracking/widgets/budget_period/budget_period.dart';
+import 'package:expense_tracking/controllers/budget_period_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
