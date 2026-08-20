@@ -475,11 +475,11 @@ class _MenuCard extends StatelessWidget {
         color: context.appColors.cardsBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
+          // BoxShadow(
+          //   color: Colors.black.withOpacity(0.04),
+          //   blurRadius: 8,
+          //   offset: const Offset(0, 2),
+          // ),
         ],
       ),
       child: InkWell(
@@ -493,10 +493,10 @@ class _MenuCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: context.appColors.balanceCardSubtext,
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, size: 22, color: const Color(0xFF1C6B47)),
+                child: Icon(icon, size: 22, color: Theme.of(context).colorScheme.primary ),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -519,7 +519,7 @@ class _MenuCard extends StatelessWidget {
                 child: Icon(
                   Icons.chevron_right_rounded,
                   size: 18,
-                  color: context.appColors.paragraphColor.withOpacity(0.5),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],

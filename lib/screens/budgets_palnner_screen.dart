@@ -821,11 +821,11 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
               ),
             ),
             const SizedBox(height: 16),
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Resets',
-                style: TextStyle(fontSize: 12, color: Colors.black54),
+                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface)
               ),
             ),
             const SizedBox(height: 6),
