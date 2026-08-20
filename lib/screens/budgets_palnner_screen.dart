@@ -1,5 +1,6 @@
 import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/screens/budgets_history_screen.dart';
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,9 @@ import 'package:expense_tracking/models/category_model.dart';
 const String _addNewCategorySentinel = '__add_new_category__';
 
 IconData _resolveBudgetIcon(BuildContext context, String categoryName) {
-  final categories = context.watch<CategoryProvider>().categoriesFor(CategoryType.expense);
+  final categories = context.watch<CategoryProvider>().categoriesFor(
+    CategoryType.expense,
+  );
   for (final category in categories) {
     if (category.name == categoryName) return resolveCategoryIcon(category);
   }
@@ -46,10 +49,12 @@ class _BudgetPlannerScreenState extends State<BudgetPlannerScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8F7),
       appBar: AppBar(
         leading: const BackButton(),
-        title: const Text('Budget Planner', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Budget Planner',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0,
         actions: [
           IconButton(
@@ -63,7 +68,10 @@ class _BudgetPlannerScreenState extends State<BudgetPlannerScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF1C6B47),
-        onPressed: () => showDialog(context: context, builder: (_) => const _NewBudgetDialog()),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (_) => const _NewBudgetDialog(),
+        ),
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: SafeArea(
@@ -74,7 +82,10 @@ class _BudgetPlannerScreenState extends State<BudgetPlannerScreen> {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 22,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
@@ -92,19 +103,29 @@ class _BudgetPlannerScreenState extends State<BudgetPlannerScreen> {
                 ),
                 child: Column(
                   children: [
-                    const Icon(Icons.savings_rounded, color: Colors.white70, size: 22),
+                    const Icon(
+                      Icons.savings_rounded,
+                      color: Colors.white70,
+                      size: 22,
+                    ),
                     const SizedBox(height: 8),
                     const Text(
                       'TOTAL BUDGET',
                       style: TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w600,
-                        color: Colors.white70, letterSpacing: 0.6,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white70,
+                        letterSpacing: 0.6,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       '\$${totalSpent.toStringAsFixed(0)} / \$${totalTarget.toStringAsFixed(0)}',
-                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
@@ -117,7 +138,9 @@ class _BudgetPlannerScreenState extends State<BudgetPlannerScreen> {
                     child: Text(
                       "No budgets set yet.\nTap + to add one.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface , )
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 )
@@ -131,8 +154,9 @@ class _BudgetPlannerScreenState extends State<BudgetPlannerScreen> {
                     ),
                     isExpanded: _expandedCategory == budget.category,
                     onToggle: () => setState(() {
-                      _expandedCategory =
-                          _expandedCategory == budget.category ? null : budget.category;
+                      _expandedCategory = _expandedCategory == budget.category
+                          ? null
+                          : budget.category;
                     }),
                   ),
                   const SizedBox(height: 14),
@@ -170,7 +194,9 @@ class _BudgetCardState extends State<_BudgetCard> {
   @override
   void initState() {
     super.initState();
-    _amountController = TextEditingController(text: widget.budget.targetAmount.toStringAsFixed(0));
+    _amountController = TextEditingController(
+      text: widget.budget.targetAmount.toStringAsFixed(0),
+    );
     _period = widget.budget.period;
   }
 
@@ -248,10 +274,14 @@ class _BudgetCardState extends State<_BudgetCard> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.appColors.cardsBackground,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 10, offset: const Offset(0, 3)),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
         ],
       ),
       child: Column(
@@ -270,10 +300,20 @@ class _BudgetCardState extends State<_BudgetCard> {
                         width: 38,
                         height: 38,
                         decoration: BoxDecoration(
-                          color: (isOverBudget ? Colors.red : const Color(0xFF1C6B47)).withValues(alpha: 0.1),
+                          color:
+                              (isOverBudget
+                                      ? Colors.red
+                                      : const Color(0xFF1C6B47))
+                                  .withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(icon, color: isOverBudget ? Colors.red : const Color(0xFF1C6B47), size: 19),
+                        child: Icon(
+                          icon,
+                          color: isOverBudget
+                              ? Colors.red
+                              : const Color(0xFF1C6B47),
+                          size: 19,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -284,11 +324,18 @@ class _BudgetCardState extends State<_BudgetCard> {
                               widget.budget.category,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
                             ),
                             Text(
                               widget.budget.period.label,
-                              style: const TextStyle(fontSize: 11, color: Colors.black45),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: context.appColors.paragraphColor,
+                              ),
                             ),
                           ],
                         ),
@@ -301,7 +348,9 @@ class _BudgetCardState extends State<_BudgetCard> {
                   '\$${widget.spent.toStringAsFixed(0)} / \$${widget.budget.targetAmount.toStringAsFixed(0)}',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: isOverBudget ? Colors.red : Colors.black87,
+                    color: isOverBudget
+                        ? Colors.red
+                        : Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 // const SizedBox(width: 4),
@@ -318,13 +367,15 @@ class _BudgetCardState extends State<_BudgetCard> {
             child: LinearProgressIndicator(
               minHeight: 8,
               value: progress,
-              backgroundColor: Colors.grey.shade200,
+              backgroundColor: Colors.white60,
               color: isOverBudget ? Colors.red : const Color(0xFF1C6B47),
             ),
           ),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
-            child: widget.isExpanded ? _buildExpandedEditor() : const SizedBox(width: double.infinity),
+            child: widget.isExpanded
+                ? _buildExpandedEditor()
+                : const SizedBox(width: double.infinity),
           ),
         ],
       ),
@@ -337,7 +388,7 @@ class _BudgetCardState extends State<_BudgetCard> {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8F7),
+          color: context.appColors.expandedcardtheme,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -346,37 +397,103 @@ class _BudgetCardState extends State<_BudgetCard> {
             TextField(
               controller: _amountController,
               enabled: !_isSaving,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
-                labelText: 'Budget amount',
-                isDense: true,
-                filled: true,
-                fillColor: Colors.white,
+                //   labelText: 'Budget amount',
+                //   isDense: true,
+                //   filled: true,
+                //   fillColor: Colors.white,
+
+                // Normal
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Color(0xFFDCE5DF)),
+                  borderSide: BorderSide(
+                    color: Colors.black.withValues(alpha: 0.35),
+                    width: 1.2,
+                  ),
                 ),
+
+                //   // When focused
+                //   focusedBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(10),
+                //     borderSide: BorderSide(
+                //       color: Colors.black.withValues(alpha: 0.35),
+                //       width: 1.2,
+                //     ),
+                //   ),
+
+                //   // When disabled
+                //   disabledBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(10),
+                //     borderSide: BorderSide(
+                //       color: Colors.black.withValues(alpha: 0.35),
+                //       width: 1.2,
+                //     ),
+                //   ),
               ),
             ),
+            // TextField(
+            //   controller: _amountController,
+            //   enabled: !_isSaving,
+            //   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            //   decoration: InputDecoration(
+            //     labelText: 'Budget amount',
+            //     isDense: true,
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //        borderSide: const BorderSide(
+            //         width: 0.1,
+
+            //         color: Color(0xFFDCE5DF)),
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 12),
-            const Text('Resets', style: TextStyle(fontSize: 12, color: Colors.black54)),
+            const Text(
+              'Resets',
+              style: TextStyle(fontSize: 12, color: Colors.white),
+            ),
             const SizedBox(height: 6),
-            SegmentedButton<BudgetPeriod>(
-              style: SegmentedButton.styleFrom(
-                selectedBackgroundColor: const Color(0xFF1C6B47),
-                selectedForegroundColor: Colors.white,
-                foregroundColor: const Color(0xFF1C6B47),
-                backgroundColor: Colors.white,
+
+            Center(
+              child: SegmentedButton<BudgetPeriod>(
+                style: SegmentedButton.styleFrom(
+                  selectedBackgroundColor: const Color(0xFF1C6B47),
+                  selectedForegroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF1C6B47),
+                  backgroundColor: Colors.white,
+              
+                  // Only change the border
+                  side: const BorderSide(color: Color(0xFFDCE5DF), width: 1),
+                ),
+                segments: const [
+                  ButtonSegment(
+                    value: BudgetPeriod.weekly,
+                    label: Text('Weekly'),
+                  ),
+                  ButtonSegment(
+                    value: BudgetPeriod.monthly,
+                    label: Text('Monthly'),
+                  ),
+                  ButtonSegment(
+                    value: BudgetPeriod.yearly,
+                    label: Text('Yearly'),
+                  ),
+                ],
+                selected: {_period},
+                onSelectionChanged: _isSaving
+                    ? null
+                    : (selection) {
+                        setState(() => _period = selection.first);
+                      },
               ),
-              segments: const [
-                ButtonSegment(value: BudgetPeriod.weekly, label: Text('Weekly')),
-                ButtonSegment(value: BudgetPeriod.monthly, label: Text('Monthly')),
-                ButtonSegment(value: BudgetPeriod.yearly, label: Text('Yearly')),
-              ],
-              selected: {_period},
-              onSelectionChanged: _isSaving ? null : (selection) => setState(() => _period = selection.first),
             ),
             const SizedBox(height: 14),
+            
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -384,23 +501,36 @@ class _BudgetCardState extends State<_BudgetCard> {
                 // const Spacer(),
                 TextButton(
                   onPressed: _isSaving ? null : _delete,
-                  child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red,),
+                  )
                 ),
                 TextButton(
                   onPressed: _isSaving ? null : widget.onToggle,
                   child: const Text('Cancel'),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: _isSaving ? null : _save,
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1C6B47)),
-                  child: _isSaving
+                TextButton(onPressed: 
+                _isSaving ? null : _save,
+                
+                
+                 child: _isSaving
                       ? const SizedBox(
-                          width: 16, height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
-                      : const Text('Save', style: TextStyle(color: Colors.white)),
-                ),
+                      :  Text(
+                          'Save',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Theme.of(context).colorScheme.onSurface),
+                        ),)
+             
               ],
             ),
           ],
@@ -490,7 +620,9 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
     final amount = double.tryParse(_amountController.text.trim());
 
     if (category == null || amount == null || amount <= 0) {
-      context.read<NotifyingProvider>().showMessage('Pick a category and enter a valid amount.');
+      context.read<NotifyingProvider>().showMessage(
+        'Pick a category and enter a valid amount.',
+      );
       return;
     }
 
@@ -516,10 +648,17 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final expenseCategories = context.watch<CategoryProvider>().categoriesFor(CategoryType.expense);
-    final budgetedCategories = context.watch<BudgetProvider>().budgets.map((b) => b.category).toSet();
-    final availableCategories =
-        expenseCategories.where((c) => !budgetedCategories.contains(c.name)).toList();
+    final expenseCategories = context.watch<CategoryProvider>().categoriesFor(
+      CategoryType.expense,
+    );
+    final budgetedCategories = context
+        .watch<BudgetProvider>()
+        .budgets
+        .map((b) => b.category)
+        .toSet();
+    final availableCategories = expenseCategories
+        .where((c) => !budgetedCategories.contains(c.name))
+        .toList();
 
     final dropdownCategories = [...availableCategories];
     if (!_isAddingNewCategory &&
@@ -527,7 +666,11 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
         !dropdownCategories.any((c) => c.name == _selectedCategory)) {
       dropdownCategories.insert(
         0,
-        CategoryModel(id: _selectedCategory!, name: _selectedCategory!, type: CategoryType.expense),
+        CategoryModel(
+          id: _selectedCategory!,
+          name: _selectedCategory!,
+          type: CategoryType.expense,
+        ),
       );
     }
 
@@ -570,9 +713,18 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
                         value: category.name,
                         child: Row(
                           children: [
-                            Icon(resolveCategoryIcon(category), size: 18, color: const Color(0xFF1C6B47)),
+                            Icon(
+                              resolveCategoryIcon(category),
+                              size: 18,
+                              color: const Color(0xFF1C6B47),
+                            ),
                             const SizedBox(width: 10),
-                            Expanded(child: Text(category.name, overflow: TextOverflow.ellipsis)),
+                            Expanded(
+                              child: Text(
+                                category.name,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -580,9 +732,16 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
                       value: _addNewCategorySentinel,
                       child: Row(
                         children: [
-                          Icon(Icons.add_circle_outline_rounded, size: 18, color: Color(0xFF1C6B47)),
+                          Icon(
+                            Icons.add_circle_outline_rounded,
+                            size: 18,
+                            color: Color(0xFF1C6B47),
+                          ),
                           SizedBox(width: 10),
-                          Text('Add new category', style: TextStyle(color: Color(0xFF1C6B47))),
+                          Text(
+                            'Add new category',
+                            style: TextStyle(color: Color(0xFF1C6B47)),
+                          ),
                         ],
                       ),
                     ),
@@ -615,7 +774,9 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
                         fillColor: const Color(0xFFF7F8F7),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFFDCE5DF)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFDCE5DF),
+                          ),
                         ),
                       ),
                       onSubmitted: (_) => _confirmNewCategory(),
@@ -628,10 +789,17 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
                   // working instead of looking frozen.
                   _isConfirmingCategory
                       ? const SizedBox(
-                          width: 20, height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF1C6B47)),
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Color(0xFF1C6B47),
+                          ),
                         )
-                      : TextButton(onPressed: _confirmNewCategory, child: const Text("Ok")),
+                      : TextButton(
+                          onPressed: _confirmNewCategory,
+                          child: const Text("Ok"),
+                        ),
                 ],
               ),
             ],
@@ -639,7 +807,9 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
             TextField(
               controller: _amountController,
               enabled: !_isSaving,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
                 labelText: 'Budget amount',
                 filled: true,
@@ -653,7 +823,10 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
             const SizedBox(height: 16),
             const Align(
               alignment: Alignment.centerLeft,
-              child: Text('Resets', style: TextStyle(fontSize: 12, color: Colors.black54)),
+              child: Text(
+                'Resets',
+                style: TextStyle(fontSize: 12, color: Colors.black54),
+              ),
             ),
             const SizedBox(height: 6),
             SegmentedButton<BudgetPeriod>(
@@ -663,13 +836,24 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
                 foregroundColor: const Color(0xFF1C6B47),
               ),
               segments: const [
-                ButtonSegment(value: BudgetPeriod.weekly, label: Text('Weekly')),
-                ButtonSegment(value: BudgetPeriod.monthly, label: Text('Monthly')),
-                ButtonSegment(value: BudgetPeriod.yearly, label: Text('Yearly')),
+                ButtonSegment(
+                  value: BudgetPeriod.weekly,
+                  label: Text('Weekly'),
+                ),
+                ButtonSegment(
+                  value: BudgetPeriod.monthly,
+                  label: Text('Monthly'),
+                ),
+                ButtonSegment(
+                  value: BudgetPeriod.yearly,
+                  label: Text('Yearly'),
+                ),
               ],
               selected: {_selectedPeriod},
-              onSelectionChanged:
-                  _isSaving ? null : (selection) => setState(() => _selectedPeriod = selection.first),
+              onSelectionChanged: _isSaving
+                  ? null
+                  : (selection) =>
+                        setState(() => _selectedPeriod = selection.first),
             ),
           ],
         ),
@@ -681,11 +865,17 @@ class _NewBudgetDialogState extends State<_NewBudgetDialog> {
         ),
         ElevatedButton(
           onPressed: _isSaving ? null : _save,
-          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1C6B47)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1C6B47),
+          ),
           child: _isSaving
               ? const SizedBox(
-                  width: 16, height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
                 )
               : const Text('Save', style: TextStyle(color: Colors.white)),
         ),

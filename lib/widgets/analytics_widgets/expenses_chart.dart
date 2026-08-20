@@ -28,46 +28,47 @@ class ExpensesChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
       children: [
-         Text(
-                  "Transaction",
-                  style: TextStyle(fontWeight: FontWeight.bold, color:Theme.of(context).colorScheme.onSurface , fontSize: 26),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              color: context.appColors.cardsBackground,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Income vs Expense",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
-       
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
-            color: context.appColors.cardsBackground,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Income vs Expense",
-                style: TextStyle(fontWeight: FontWeight.w600, color:Theme.of(context).colorScheme.onSurface),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _bar(
-                    context: context,
-                    height: barHeight(income),
-                    color: Colors.green.shade700,
-                    label: "Income",
-                    amount: income,
-                  ),
-                  _bar(
-                    context: context,
-                    height: barHeight(expense),
-                    color: Colors.indigo,
-                    label: "Expense",
-                    amount: expense,
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _bar(
+                      context: context,
+                      height: barHeight(income),
+                      color: Colors.green.shade700,
+                      label: "Income",
+                      amount: income,
+                    ),
+                    _bar(
+                      context: context,
+                      height: barHeight(expense),
+                      color: Colors.indigo,
+                      label: "Expense",
+                      amount: expense,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -85,16 +86,22 @@ class ExpensesChart extends StatelessWidget {
       children: [
         Text(
           '\$${amount.toStringAsFixed(0)}',
-          style: TextStyle(fontSize: 12, color:Theme.of(context).colorScheme.onSurface),
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
         const SizedBox(height: 4),
         Container(
           width: 44,
           height: height,
-          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontSize: 12)),
+        Text(label, style:  TextStyle(fontSize: 12 ,  color: Theme.of(context).colorScheme.onSurface,)),
       ],
     );
   }

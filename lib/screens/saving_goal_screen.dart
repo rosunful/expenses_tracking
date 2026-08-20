@@ -2,6 +2,7 @@ import 'package:expense_tracking/models/saving_model.dart';
 import 'package:expense_tracking/providers/notifying_provider.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
 import 'package:expense_tracking/screens/saving_goal_history_screen.dart';
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'add_goal_contribution_screen.dart';
@@ -12,6 +13,19 @@ class SavingsGoalsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final goals = context.watch<SavingsGoalProvider>().goals;
+
+
+    final totalGoals = goals.length;
+
+final completedGoals = goals.where(
+  (goal) => goal.savedAmount >= goal.targetAmount,
+).length;
+
+final progress = totalGoals == 0
+    ? 0.0
+    : completedGoals / totalGoals;
+
+final progressPercent = (progress * 100).round();
 
     return Scaffold(
       appBar: AppBar(
@@ -96,13 +110,12 @@ class _GoalCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F2),
+        color: context.appColors.cardsBackground,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          // Tapping the whole card (minus the menu button) opens the
-          // "add money" screen — the primary action for a goal card.
+         
           Expanded(
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
@@ -127,7 +140,8 @@ class _GoalCard extends StatelessWidget {
                         ),
                         Text(
                           '${goal.progressPercent}%',
-                          style: const TextStyle(
+                          style:  TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                           ),
@@ -142,16 +156,19 @@ class _GoalCard extends StatelessWidget {
                       children: [
                         Text(
                           goal.title,
-                          style: const TextStyle(
+                          maxLines: 1,
+                          style:  TextStyle(
+                            color:  Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.w700,
                             fontSize: 13,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(
                           '\$${goal.savedAmount.toStringAsFixed(0)} of \$${goal.targetAmount.toStringAsFixed(0)} saved',
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 11,
-                            color: Colors.black54,
+                            color: context.appColors.paragraphColor,
                           ),
                         ),
                       ],
@@ -161,10 +178,9 @@ class _GoalCard extends StatelessWidget {
               ),
             ),
           ),
-          // Separate tap target for edit/delete, so it doesn't collide
-          // with "tap card to add money".
+          
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.black45),
+            icon:  Icon(Icons.more_vert, color: context.appColors.paragraphColor,),
             onSelected: (value) {
               if (value == 'edit') {
                 Navigator.of(context).push(
@@ -184,9 +200,7 @@ class _GoalCard extends StatelessWidget {
   }
 }
 
-/// Renamed from _GoalFormDialog and made public (no leading underscore)
-/// since it's now a full screen pushed via Navigator, not a dialog
-/// built inline within this file's own widget tree.
+
 class GoalFormScreen extends StatefulWidget {
   final SavingsGoalModel? existing;
   const GoalFormScreen({super.key, this.existing});
@@ -237,8 +251,6 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
     if (mounted) Navigator.of(context).pop();
   }
 
-  /// Soft delete — moves this goal to Goal History rather than erasing
-  /// it, same as Budget Planner's Delete button.
   Future<void> _hide() async {
     if (widget.existing == null) return;
     await context.read<SavingsGoalProvider>().hideGoal(widget.existing!.id);

@@ -1,4 +1,5 @@
 import 'package:expense_tracking/controllers/budget_period_controller.dart';
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
@@ -61,7 +62,7 @@ class BudgetHistoryScreen extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: const Color(0xffF3F5F3),
+                      color:context.appColors.cardsBackground,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -72,11 +73,11 @@ class BudgetHistoryScreen extends StatelessWidget {
                             children: [
                               Text(
                                 budget.category,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style:  TextStyle(fontWeight: FontWeight.bold , color: Theme.of(context).colorScheme.onSurface,)
                               ),
                               Text(
                                 '\$${budget.targetAmount.toStringAsFixed(0)} · ${budget.period.shortLabel}',
-                                style: const TextStyle(fontSize: 12, color: Colors.black54),
+                                style:  TextStyle(fontSize: 12, color: context.appColors.paragraphColor),
                               ),
                             ],
                           ),
@@ -84,7 +85,7 @@ class BudgetHistoryScreen extends StatelessWidget {
                         TextButton(
                           onPressed: () =>
                               context.read<BudgetProvider>().unhideBudget(budget.category),
-                          child: const Text('Undo'),
+                          child: const Icon(Icons.history),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_forever, color: Colors.redAccent),

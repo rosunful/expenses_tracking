@@ -10,18 +10,9 @@ class SpendingCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoryTotals = context.watch<ExpensesController>().categoryTotals;
 
-    // Sort categories highest-spending first, same order your
-    // hardcoded version showed (Shopping, Food, Transport, Entertainment).
     final sortedEntries = categoryTotals.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-
-    // Every bar's progress is now relative to TOTAL spending across all
-    // categories, not the top category. Food taking $50 out of $100
-    // total now shows a 50% bar, Transport at $20 shows 20%, Clothing
-    // at $15 shows 15%, and so on — the bars actually represent each
-    // category's real share of spending, instead of the top category
-    // always rendering as a full 100% bar by definition (which is what
-    // was looking wrong before).
+  
     final totalAmount = sortedEntries.fold<double>(0, (sum, e) => sum + e.value);
 
     return Container(

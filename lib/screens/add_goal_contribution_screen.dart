@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:expense_tracking/widgets/add_expenses_widgets/amount_display.dart';
 import 'package:expense_tracking/widgets/add_expenses_widgets/number_pad.dart';
 
-
 class AddGoalContributionScreen extends StatefulWidget {
   final SavingsGoalModel goal;
   const AddGoalContributionScreen({super.key, required this.goal});
@@ -44,8 +43,7 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
     final parsedAmount = double.tryParse(amount) ?? 0;
     if (parsedAmount <= 0) {
       context.read<NotifyingProvider>().showMessage("Enter an amount first. ");
-  
-     }
+    }
 
     // Firestore's increment handles the math server-side — we don't
     // need to know the goal's current savedAmount to add to it.
@@ -55,8 +53,10 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
     );
 
     if (!mounted) return;
-    context.read<NotifyingProvider>().showMessage("Added \$${parsedAmount.toStringAsFixed(2)} to ${widget.goal.title}");
-    
+    context.read<NotifyingProvider>().showMessage(
+      "Added \$${parsedAmount.toStringAsFixed(2)} to ${widget.goal.title}",
+    );
+
     Navigator.of(context).pop();
   }
 
@@ -71,77 +71,87 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(Icons.arrow_back),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      goal.title,
-                      style:  TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Text(
-                '\$${goal.savedAmount.toStringAsFixed(0)} of \$${goal.targetAmount.toStringAsFixed(0)} saved',
-                style: const TextStyle(color: Colors.black54),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
                   children: [
-                    AmountDisplay(amount: amount),
-                    const SizedBox(height: 20),
-                    // NoteField(controller: noteController),
-                    // const SizedBox(height: 20),
-                    NumberPad(onKeyPressed: _handleKeyPress),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _saveContribution,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1C6B47),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          child: const Text(
-                            'Add to Goal',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.arrow_back),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "Set Goal",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-            ),
-          ],
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  goal.title,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              SizedBox(height:4),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Text(
+                  '\$${goal.savedAmount.toStringAsFixed(0)} '
+                  'of \$${goal.targetAmount.toStringAsFixed(0)} saved',
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              AmountDisplay(amount: amount),
+
+              const SizedBox(height: 20),
+
+              NumberPad(onKeyPressed: _handleKeyPress),
+
+              const SizedBox(height: 20),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 52.0, vertical: 24),
+                child: Container(
+                  decoration: BoxDecoration(
+                     color : const Color(0xFF1C6B47),
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  width: double.infinity,
+                  
+                  child: InkWell(
+                    onTap: _saveContribution,
+                    child: Center(child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Add to Goal" , style: TextStyle(fontSize: 18, fontWeight: FontWeight(600)  ,color: Colors.white),),
+                    ))),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

@@ -64,6 +64,7 @@ class AppTheme {
         blueColor: Color(0xFF3457C9),
 
         paragraphColor:Color.fromARGB(255, 171, 175, 173),
+        expandedcardtheme:Color.fromARGB(255, 251, 247, 247),
       ),
     ],
   );
@@ -121,6 +122,7 @@ class AppTheme {
         blueColor: Color(0xFF3457C9),
 
         paragraphColor:Color.fromARGB(255, 171, 175, 173),
+        expandedcardtheme:Color.fromARGB(255, 48, 80, 66),
       ),
     ],
   );
@@ -179,6 +181,9 @@ class AppColors extends ThemeExtension<AppColors> {
   //THIS COLOR IS FOR THE SUB HEADING KO NI HEADING LIKE GREY TYPE TEXT KO LAGI
   final Color paragraphColor;
 
+  //THIS COLOR IS FOR THE EXPENDED CARD OF BUDGET PLANNER
+  final Color expandedcardtheme;
+
   const AppColors({
     required this.balanceCardBackground,
     required this.balanceCardText,
@@ -205,6 +210,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.logoutButtonTextColor,
     required this.blueColor,
     required this.paragraphColor,
+    required this.expandedcardtheme,
   });
 
   @override
@@ -234,6 +240,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? logoutButtonTextColor,
     Color? blueColor,
     Color? paragraphColor,
+    Color? expandedcardtheme,
   }) {
     return AppColors(
       balanceCardBackground:
@@ -265,6 +272,7 @@ class AppColors extends ThemeExtension<AppColors> {
           logoutButtonTextColor ?? this.logoutButtonTextColor,
       blueColor: blueColor ?? this.blueColor,
       paragraphColor: paragraphColor ?? this.paragraphColor,
+      expandedcardtheme: expandedcardtheme ?? this.expandedcardtheme,
     );
   }
 

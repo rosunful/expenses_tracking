@@ -1,5 +1,6 @@
 import 'package:expense_tracking/models/saving_model.dart';
 import 'package:expense_tracking/providers/saving_goal_provider.dart';
+import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +62,7 @@ class SavingsGoalHistoryScreen extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: const Color(0xffF3F5F3),
+                      color: context.appColors.cardsBackground,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -70,10 +71,10 @@ class SavingsGoalHistoryScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(goal.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              Text(goal.title, style:  TextStyle(fontWeight: FontWeight.bold ,  color: Theme.of(context).colorScheme.onSurface)),
                               Text(
                                 '\$${goal.savedAmount.toStringAsFixed(0)} of \$${goal.targetAmount.toStringAsFixed(0)} saved',
-                                style: const TextStyle(fontSize: 12, color: Colors.black54),
+                                style:  TextStyle(fontSize: 12, color: context.appColors.paragraphColor),
                               ),
                             ],
                           ),
@@ -81,7 +82,7 @@ class SavingsGoalHistoryScreen extends StatelessWidget {
                         TextButton(
                           onPressed: () =>
                               context.read<SavingsGoalProvider>().unhideGoal(goal.id),
-                          child: const Text('Undo'),
+                          child: const Icon(Icons.history),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_forever, color: Colors.redAccent),

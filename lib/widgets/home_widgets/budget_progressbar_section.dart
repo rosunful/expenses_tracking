@@ -80,47 +80,26 @@ class _MostUrgentBudget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // The home screen only has room for one budget, so we surface
-    // whichever one is closest to (or over) its limit — that's the
-    // one most worth the user's attention right now.
-
-    // Single pass over the transaction list: remember each budget's
-    // period reset date, then sum every expense into its category in one
-    // loop. Calling spentForCategorySince() per budget used to re-scan
-    // the whole list for every budget on every rebuild (O(budgets × txs)).
-    final startByCategory = <String, DateTime>{
-      for (final b in budgets) b.category: periodStartFor(b.period),
-    };
-    final spent = <String, double>{};
-    for (final e in expenses.transactions) {
-      if (e.type != TransactionType.expense) continue;
-      final start = startByCategory[e.category];
-      if (start == null || e.date.isBefore(start)) continue;
-      spent[e.category] = (spent[e.category] ?? 0) + e.amount;
-    }
-
-    BudgetModel? topBudget;
-    double topRatio = -1;
-    double topSpent = 0;
+    // Calculate total spent across ALL budgets.
+    double totalSpent = 0;
+    double totalTarget = 0;
 
     for (final budget in budgets) {
-      final spentForCategory = spent[budget.category] ?? 0;
-      final ratio = budget.targetAmount == 0
-          ? 0
-          : spentForCategory / budget.targetAmount;
-      if (ratio > topRatio) {
-        topRatio = ratio.toDouble();
-        topBudget = budget;
-        topSpent = spentForCategory;
-      }
+      final spentForCategory = expenses.spentForCategorySince(
+        budget.category,
+        periodStartFor(budget.period),
+      );
+
+      totalSpent += spentForCategory;
+      totalTarget += budget.targetAmount;
     }
 
-    if (topBudget == null) return const SizedBox.shrink();
-
-    final isOverBudget = topSpent > topBudget.targetAmount;
-    final progress = topBudget.targetAmount == 0
+    // Overall progress.
+    final progress = totalTarget == 0
         ? 0.0
-        : (topSpent / topBudget.targetAmount).clamp(0.0, 1.0);
+        : (totalSpent / totalTarget).clamp(0.0, 1.0);
+
+    final isOverBudget = totalSpent > totalTarget;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,18 +109,20 @@ class _MostUrgentBudget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "Budget · ${topBudget.category}",
+                "Total Budget",
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style:  TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),
+
             const SizedBox(width: 8),
+
             Text(
-              '${formatCurrency(topSpent)} / ${formatCurrency(topBudget.targetAmount)}',
+              '\$${totalSpent.toStringAsFixed(0)} / \$${totalTarget.toStringAsFixed(0)}',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Theme.of(context).colorScheme.onSurface,
@@ -149,17 +130,120 @@ class _MostUrgentBudget extends StatelessWidget {
             ),
           ],
         ),
+
         const SizedBox(height: 10),
+
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: LinearProgressIndicator(
             minHeight: 6,
             value: progress,
             backgroundColor: colorScheme.surfaceContainerHighest,
-            color: isOverBudget ? colorScheme.error : colorScheme.primary,
+            color: isOverBudget
+                ? colorScheme.error
+                : colorScheme.primary,
           ),
         ),
       ],
     );
   }
 }
+
+
+// class _MostUrgentBudget extends StatelessWidget {
+//   final List<BudgetModel> budgets;
+//   final ExpensesController expenses;
+//   final ColorScheme colorScheme;
+
+//   const _MostUrgentBudget({
+//     required this.budgets,
+//     required this.expenses,
+//     required this.colorScheme,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // The home screen only has room for one budget, so we surface
+//     // whichever one is closest to (or over) its limit — that's the
+//     // one most worth the user's attention right now.
+
+//     // Single pass over the transaction list: remember each budget's
+//     // period reset date, then sum every expense into its category in one
+//     // loop. Calling spentForCategorySince() per budget used to re-scan
+//     // the whole list for every budget on every rebuild (O(budgets × txs)).
+//     final startByCategory = <String, DateTime>{
+//       for (final b in budgets) b.category: periodStartFor(b.period),
+//     };
+//     final spent = <String, double>{};
+//     for (final e in expenses.transactions) {
+//       if (e.type != TransactionType.expense) continue;
+//       final start = startByCategory[e.category];
+//       if (start == null || e.date.isBefore(start)) continue;
+//       spent[e.category] = (spent[e.category] ?? 0) + e.amount;
+//     }
+
+//     BudgetModel? topBudget;
+//     double topRatio = -1;
+//     double topSpent = 0;
+
+//     for (final budget in budgets) {
+//       final spentForCategory = spent[budget.category] ?? 0;
+//       final ratio = budget.targetAmount == 0
+//           ? 0
+//           : spentForCategory / budget.targetAmount;
+//       if (ratio > topRatio) {
+//         topRatio = ratio.toDouble();
+//         topBudget = budget;
+//         topSpent = spentForCategory;
+//       }
+//     }
+
+//     if (topBudget == null) return const SizedBox.shrink();
+
+//     final isOverBudget = topSpent > topBudget.targetAmount;
+//     final progress = topBudget.targetAmount == 0
+//         ? 0.0
+//         : (topSpent / topBudget.targetAmount).clamp(0.0, 1.0);
+
+//     return Column(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: [
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Expanded(
+//               child: Text(
+//                 "Budget · ${topBudget.category}",
+//                 maxLines: 1,
+//                 overflow: TextOverflow.ellipsis,
+//                 style:  TextStyle(
+//                   fontWeight: FontWeight.w600,
+//                   color: Theme.of(context).colorScheme.onSurface,
+//                 ),
+//               ),
+//             ),
+//             const SizedBox(width: 8),
+//             Text(
+//               '${formatCurrency(topSpent)} / ${formatCurrency(topBudget.targetAmount)}',
+//               style: TextStyle(
+//                 fontWeight: FontWeight.w600,
+//                 color: Theme.of(context).colorScheme.onSurface,
+//               ),
+//             ),
+//           ],
+//         ),
+//         const SizedBox(height: 10),
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(10),
+//           child: LinearProgressIndicator(
+//             minHeight: 6,
+//             value: progress,
+//             backgroundColor: colorScheme.surfaceContainerHighest,
+//             color: isOverBudget ? colorScheme.error : colorScheme.primary,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
