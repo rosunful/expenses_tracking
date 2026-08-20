@@ -24,19 +24,19 @@ class ExpensesChart extends StatelessWidget {
     double barHeight(double amount) =>
         amount == 0 ? 0 : (amount * scale).clamp(6.0, maxBarHeight);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 10,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            decoration: BoxDecoration(
-              color: context.appColors.cardsBackground,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: context.appColors.cardsBackground,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // spacing: 10,
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -69,9 +69,9 @@ class ExpensesChart extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -101,7 +101,13 @@ class ExpensesChart extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(label, style:  TextStyle(fontSize: 12 ,  color: Theme.of(context).colorScheme.onSurface,)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
       ],
     );
   }

@@ -47,38 +47,47 @@ class AccountAnalyticsChart extends StatelessWidget {
       return (amount * scale).clamp(6.0, maxBarHeight);
     }
 
-    return Container(
-      height: 190,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      decoration: BoxDecoration(
-        color: context.appColors.cardsBackground,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Spending by account",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal:3),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: context.appColors.cardsBackground,
+          borderRadius: BorderRadius.circular(20),
+        ),
+      
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Spending by account",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
-          ),
-
-          const SizedBox(height: 24),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _bar(context, "Cash", cash, barHeight(cash), Colors.green.shade700,),
-
-              _bar(context, "Bank", bank, barHeight(bank), Colors.indigo,),
-
-              _bar(context, "Card", card, barHeight(card) , Color(0xFF1C6B47),) ,
-            ],
-          ),
-        ],
+      
+            const SizedBox(height: 24),
+      
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _bar(
+                  context,
+                  "Cash",
+                  cash,
+                  barHeight(cash),
+                  Colors.green.shade700,
+                ),
+      
+                _bar(context, "Bank", bank, barHeight(bank), Colors.indigo),
+      
+                _bar(context, "Card", card, barHeight(card), Color(0xFF1C6B47)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

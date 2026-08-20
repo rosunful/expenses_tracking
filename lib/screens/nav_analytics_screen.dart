@@ -28,18 +28,19 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(14.0),
+            padding: const EdgeInsets.symmetric(horizontal:  14.0 , vertical: 6),
             child: Column(
-              spacing: 10,
+             
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0 , vertical: 6.0),
                   child: Text(
                     "Analysis",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26, color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ),
+                // const SizedBox(height: 10,),
 
                 SizedBox(
                   height: 230,
@@ -53,6 +54,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     children: const [ExpensesChart(), AccountAnalyticsChart()],
                   ),
                 ),
+                const SizedBox(height: 10,),
 
                 // Page indicator
                 Row(
@@ -73,10 +75,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 10,),
 
                 const SpendingCategoryCard(),
+                const SizedBox(height: 10,),
 
                 const TopCategoryCard(),
+                 const SizedBox(height: 25),
+
+                
               ],
             ),
           ),

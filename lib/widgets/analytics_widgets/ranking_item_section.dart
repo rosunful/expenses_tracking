@@ -50,8 +50,10 @@ class TopCategoryCard extends StatelessWidget {
                 "Based on this month's activity",
                 style: TextStyle(color: context.appColors.paragraphColor, fontSize: 12),
               ),
+              
             ],
           ),
+          
         ],
       ),
     );
