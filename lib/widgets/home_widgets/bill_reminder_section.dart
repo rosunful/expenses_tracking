@@ -1,6 +1,7 @@
 // NOTE: assumed path — adjust if ReminderProvider lives elsewhere.
 import 'package:expense_tracking/providers/reminder_provider.dart';
 import 'package:expense_tracking/models/reminder_model.dart';
+import 'package:expense_tracking/repositories/currency_repository.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/widgets/home_widgets/currency_foramatter.dart';
 import 'package:flutter/material.dart';
@@ -132,6 +133,7 @@ class _ReminderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final symbol = context.watch<CurrencyProvider>().selected.symbol;
     final due = reminder.nextDueDate;
 
     return Row(
@@ -186,7 +188,10 @@ class _ReminderRow extends StatelessWidget {
         const SizedBox(width: 8),
         if (reminder.amount != null)
           Text(
-            formatCurrency(reminder.amount!),
+             formatCurrency(
+      reminder.amount!,
+      symbol: symbol,
+    ),
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.green,

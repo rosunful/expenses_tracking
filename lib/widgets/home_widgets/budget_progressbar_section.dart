@@ -1,11 +1,10 @@
 import 'package:expense_tracking/controllers/expenses_controller.dart';
 import 'package:expense_tracking/models/budgets_model.dart';
-import 'package:expense_tracking/models/transaction_model.dart';
 import 'package:expense_tracking/providers/budgets_provider.dart';
+import 'package:expense_tracking/repositories/currency_repository.dart';
 import 'package:expense_tracking/screens/budgets_palnner_screen.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/controllers/budget_period_controller.dart';
-import 'package:expense_tracking/widgets/home_widgets/currency_foramatter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,6 +82,7 @@ class _MostUrgentBudget extends StatelessWidget {
     // Calculate total spent across ALL budgets.
     double totalSpent = 0;
     double totalTarget = 0;
+    final symbol = context.watch<CurrencyProvider>().selected.symbol;
 
     for (final budget in budgets) {
       final spentForCategory = expenses.spentForCategorySince(
@@ -122,7 +122,7 @@ class _MostUrgentBudget extends StatelessWidget {
             const SizedBox(width: 8),
 
             Text(
-              '\$${totalSpent.toStringAsFixed(0)} / \$${totalTarget.toStringAsFixed(0)}',
+              '$symbol${totalSpent.toStringAsFixed(0)} / $symbol${totalTarget.toStringAsFixed(0)}',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Theme.of(context).colorScheme.onSurface,

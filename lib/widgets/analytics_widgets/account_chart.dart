@@ -1,3 +1,4 @@
+import 'package:expense_tracking/repositories/currency_repository.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ class AccountAnalyticsChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<ExpensesController>();
+    final symbol = context.watch<CurrencyProvider>().selected.symbol;
 
     final transactions = controller.transactions;
 
@@ -48,14 +50,14 @@ class AccountAnalyticsChart extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal:3),
+      padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: context.appColors.cardsBackground,
           borderRadius: BorderRadius.circular(20),
         ),
-      
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,9 +68,9 @@ class AccountAnalyticsChart extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
-      
+
             const SizedBox(height: 24),
-      
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -77,13 +79,14 @@ class AccountAnalyticsChart extends StatelessWidget {
                   context,
                   "Cash",
                   cash,
-                  barHeight(cash),
+                  barHeight(cash),                  
                   Colors.green.shade700,
+                  symbol
                 ),
-      
-                _bar(context, "Bank", bank, barHeight(bank), Colors.indigo),
-      
-                _bar(context, "Card", card, barHeight(card), Color(0xFF1C6B47)),
+
+                _bar(context, "Bank", bank, barHeight(bank), Colors.indigo ,  symbol),
+
+                _bar(context, "Card", card, barHeight(card), Color(0xFF1C6B47) ,symbol ),
               ],
             ),
           ],
@@ -98,11 +101,13 @@ class AccountAnalyticsChart extends StatelessWidget {
     double amount,
     double height,
     Color color,
+    String symbol,
   ) {
     return Column(
       children: [
         Text(
-          '\$${amount.toStringAsFixed(0)}',
+           '$symbol${amount.toStringAsFixed(0)}',
+          // '\$${amount.toStringAsFixed(0)}',
           style: TextStyle(
             fontSize: 12,
             color: Theme.of(context).colorScheme.onSurface,

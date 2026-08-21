@@ -178,6 +178,7 @@
 
 
 import 'package:expense_tracking/controllers/expenses_controller.dart';
+import 'package:expense_tracking/repositories/currency_repository.dart';
 import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:expense_tracking/widgets/home_widgets/currency_foramatter.dart';
 import 'package:flutter/material.dart';
@@ -192,6 +193,8 @@ class HeroSection extends StatelessWidget {
     final income = expenses.totalIncome;
     final expense = expenses.totalExpenses;
     final balance = income - expense;
+
+final symbol = context.watch<CurrencyProvider>().selected.symbol;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
@@ -220,7 +223,8 @@ class HeroSection extends StatelessWidget {
                     fit: BoxFit.scaleDown, // Shrinks text to fit width
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      formatCurrency(balance),
+                      // formatCurrency(balance),
+                      formatCurrency(balance, symbol: symbol),
                       style: TextStyle(
                         color: context.appColors.balanceCardText,
                         fontSize: 22,
@@ -245,7 +249,8 @@ class HeroSection extends StatelessWidget {
                          overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        formatCurrency(income),
+                        // formatCurrency(income),
+                        formatCurrency(income, symbol: symbol),
                         style: TextStyle(
                           color: context.appColors.balanceCardText,
                           fontWeight: FontWeight(500),
@@ -264,7 +269,8 @@ class HeroSection extends StatelessWidget {
                         ),                        
                       ),
                       Text(
-                        formatCurrency(expense),
+                        // formatCurrency(expense),
+                        formatCurrency(expense, symbol: symbol),
                         style: TextStyle(
                           color: context.appColors.balanceCardText,
                           fontWeight: FontWeight(500),

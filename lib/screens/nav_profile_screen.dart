@@ -378,7 +378,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                 
                     Text(
-                      'Luminious Technology Pvt. Ltd.',
+                      'Luminous Technology Pvt. Ltd.',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,

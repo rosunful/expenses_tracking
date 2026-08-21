@@ -1,6 +1,5 @@
 import 'package:expense_tracking/models/currency_model.dart';
 import 'package:expense_tracking/repositories/currency_repository.dart';
-import 'package:expense_tracking/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
