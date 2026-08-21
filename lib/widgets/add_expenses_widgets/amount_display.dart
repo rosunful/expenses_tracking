@@ -10,8 +10,6 @@ class AmountDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String checkAmount = "0";
-    // watch() so this rebuilds live the instant the currency changes —
-    // no need to leave and re-enter this screen to see the new symbol.
     final symbol = context.watch<CurrencyProvider>().selected.symbol;
 
     return Column(

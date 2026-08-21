@@ -57,13 +57,11 @@ class _UpdatingNoteScreen extends State<UpdaingNoteScreen> {
       if (result) {
         Navigator.pop(context, true);
       } else {
-          context.read<NotifyingProvider>().showMessage(
-          'Failed To Add'
-        );
+        context.read<NotifyingProvider>().showMessage('Failed To Add');
       }
     } else {
       context.read<NotifyingProvider>().showMessage(
-        "Please enter the both title and description !"
+        "Please enter the both title and description !",
       );
     }
   }
@@ -71,7 +69,10 @@ class _UpdatingNoteScreen extends State<UpdaingNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Note"),backgroundColor:Color.fromARGB(255, 39, 175, 112) , ),
+      appBar: AppBar(
+        title: Text("Edit Note"),
+        backgroundColor: Color.fromARGB(255, 39, 175, 112),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(

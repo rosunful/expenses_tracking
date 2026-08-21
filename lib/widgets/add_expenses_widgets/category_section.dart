@@ -1,9 +1,7 @@
 import 'package:expense_tracking/models/category_model.dart';
 import 'package:expense_tracking/widgets/add_income_widgets/category_chip_picker.dart';
 import 'package:flutter/material.dart';
-/// Kept as its own small widget so ExpenseForm's existing
-/// CategorySection(...) call site doesn't need to change at all —
-/// all the real logic now lives in CategoryChipPicker.
+
 class CategorySection extends StatelessWidget {
   final String selectedCategory;
   final ValueChanged<String> onSelected;

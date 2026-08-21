@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracking/models/category_model.dart';
 
-/// A curated set of icons the user can actually PICK from when creating
-/// a custom category — keyed by a short string, since IconData itself
-/// can't be stored in Firestore. The key is what gets saved on the
-/// CategoryModel; the IconData is only looked up at display time.
+
 const Map<String, IconData> categoryIconLibrary = {
   'shopping_bag': Icons.shopping_bag_rounded,
   'restaurant': Icons.restaurant_rounded,
@@ -49,10 +46,7 @@ IconData resolveCategoryIcon(CategoryModel category) {
   return iconForCategory(category.name);
 }
 
-/// Maps a category NAME to a fitting Material icon — the original
-/// name-based guess, kept as the fallback for built-in categories
-/// (which never carry an iconKey) and any legacy custom category saved
-/// before icon picking existed.
+
 IconData iconForCategory(String category) {
   switch (category.toLowerCase()) {
     case 'food':

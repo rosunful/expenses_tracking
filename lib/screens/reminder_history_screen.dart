@@ -6,12 +6,17 @@ import 'package:provider/provider.dart';
 class ReminderHistoryScreen extends StatelessWidget {
   const ReminderHistoryScreen({super.key});
 
-  Future<void> _confirmPermanentDelete(BuildContext context, ReminderModel reminder) async {
+  Future<void> _confirmPermanentDelete(
+    BuildContext context,
+    ReminderModel reminder,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Delete permanently?'),
-        content: Text('"${reminder.title}" will be permanently removed and cannot be recovered.'),
+        content: Text(
+          '"${reminder.title}" will be permanently removed and cannot be recovered.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -19,14 +24,19 @@ class ReminderHistoryScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete Permanently', style: TextStyle(color: Colors.red)),
+            child: const Text(
+              'Delete Permanently',
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
     );
 
     if (confirmed == true && context.mounted) {
-      await context.read<ReminderProvider>().permanentlyDeleteReminder(reminder.id);
+      await context.read<ReminderProvider>().permanentlyDeleteReminder(
+        reminder.id,
+      );
     }
   }
 
@@ -67,22 +77,35 @@ class ReminderHistoryScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(reminder.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              Text(
+                                reminder.title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               Text(
                                 reminder.category,
-                                style: const TextStyle(fontSize: 12, color: Colors.black54),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ],
                           ),
                         ),
                         TextButton(
-                          onPressed: () =>
-                              context.read<ReminderProvider>().unhideReminder(reminder.id),
+                          onPressed: () => context
+                              .read<ReminderProvider>()
+                              .unhideReminder(reminder.id),
                           child: const Text('Undo'),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete_forever, color: Colors.redAccent),
-                          onPressed: () => _confirmPermanentDelete(context, reminder),
+                          icon: const Icon(
+                            Icons.delete_forever,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () =>
+                              _confirmPermanentDelete(context, reminder),
                         ),
                       ],
                     ),

@@ -170,20 +170,24 @@ class _NoteScreen extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Notepad"),
-       actions: [
-        IconButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('"Notice: The notes you create are not synced with your Google account. Therefore, we do not store any notes in our database. All your notes are saved locally on your device storage !"'),
-              ),
-            );
-          },
-          icon: const Icon(Icons.info_outline),
-        ),
-        const SizedBox(width: 8,)
-      ],),
+      appBar: AppBar(
+        title: Text("Notepad"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    '"Notice: The notes you create are not synced with your Google account. Therefore, we do not store any notes in our database. All your notes are saved locally on your device storage !"',
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.info_outline),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -235,31 +239,9 @@ class _NoteScreen extends State<NoteScreen> {
         ],
       ),
 
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: const Color(0xFF1C6B47),
-      //   onPressed: () async {
-      //     final notifyingProvider = context.read<NotifyingProvider>();
-
-      //     bool? result = await Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => const AddingNoteScreen()),
-      //     );
-      //     if (result == true) {
-      //       await fetchNote();
-
-      //        if (!mounted) return;
-
-      //   context.read<NotifyingProvider>().showMessage(
-      //   'Note added successfully',
-      // );
-      //     }
-      //   },
-      //   child: const Icon(Icons.add, color: Colors.white),
-      // ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF1C6B47),
         onPressed: () async {
-          // Get the provider BEFORE the async gap.
           final notifyingProvider = context.read<NotifyingProvider>();
 
           final bool? result = await Navigator.push(

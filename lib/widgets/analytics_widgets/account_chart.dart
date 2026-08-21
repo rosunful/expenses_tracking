@@ -49,6 +49,7 @@ class AccountAnalyticsChart extends StatelessWidget {
       return (amount * scale).clamp(6.0, maxBarHeight);
     }
 
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Container(

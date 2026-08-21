@@ -24,8 +24,7 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // watch() rebuilds this page whenever isLoading/errorMessage change,
-    // e.g. to show a spinner or an error message.
+  
     final authProvider = context.watch<AuthProvider>();
 
     return Scaffold(
@@ -63,8 +62,7 @@ class _LoginScreen extends State<LoginScreen> {
                 onPressed: authProvider.isLoading
                     ? null
                     : () {
-                        // Read here instead of watch — we're calling a
-                        // method, not rebuilding this widget on it.
+                    
                         context.read<AuthProvider>().signIn(
                               _emailController.text.trim(),
                               _passwordController.text.trim(),

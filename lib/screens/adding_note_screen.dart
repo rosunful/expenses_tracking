@@ -17,7 +17,7 @@ class _AddingNoteScreenState extends State<AddingNoteScreen> {
 
   DbHelper? db;
 
-  // static const Color primaryGreen = Color(0xFF1C6B47);
+
 
   @override
   void initState() {

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ReminderProvider extends ChangeNotifier {
   final ReminderRepository _repository = ReminderRepository();
 
-  // Every reminder, hidden and visible together, as Firestore delivers it.
+  
   List<ReminderModel> _allReminders = [];
   StreamSubscription<List<ReminderModel>>? _subscription;
 
@@ -26,7 +26,6 @@ class ReminderProvider extends ChangeNotifier {
     return visible;
   }
 
-  /// What the History screen shows.
   List<ReminderModel> get hiddenReminders =>
       _allReminders.where((r) => r.isHidden).toList();
 

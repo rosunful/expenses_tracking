@@ -15,7 +15,10 @@ class BillsSubscriptionsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: const Text('Bills & Subscriptions', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Bills & Subscriptions',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0,
         actions: [
           IconButton(
@@ -29,9 +32,9 @@ class BillsSubscriptionsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF1C6B47),
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const AddReminderScreen()),
-        ),
+        onPressed: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const AddReminderScreen())),
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: SafeArea(
@@ -47,21 +50,14 @@ class BillsSubscriptionsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 itemCount: reminders.length,
                 separatorBuilder: (_, _) => const SizedBox(height: 10),
-                itemBuilder: (context, index) => _SwipeableReminderTile(reminder: reminders[index]),
+                itemBuilder: (context, index) =>
+                    _SwipeableReminderTile(reminder: reminders[index]),
               ),
       ),
     );
   }
 }
 
-/// Swipe-left-to-reveal-Delete, like iOS Mail — NOT a Dismissible.
-/// Dismissible auto-removes the item once a swipe passes a threshold;
-/// what you asked for is different: swiping only ever reveals a Delete
-/// button (capped at 30% of the tile's width), and nothing is deleted
-/// until that button is explicitly tapped. Tapping anywhere else while
-/// open just closes it back up. That distinction — "reveal vs act" —
-/// is why this needs a hand-built drag handler instead of a
-/// ready-made widget.
 class _SwipeableReminderTile extends StatefulWidget {
   final ReminderModel reminder;
   const _SwipeableReminderTile({required this.reminder});
@@ -72,14 +68,10 @@ class _SwipeableReminderTile extends StatefulWidget {
 
 class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
     with SingleTickerProviderStateMixin {
-  // 0.0 = fully closed, 1.0 = fully open (Delete fully revealed).
-  // Using an AnimationController (not just a raw double) gives us
-  // smooth snapping back to 0 or 1 after the user lets go, via
-  // animateTo() — a plain setState field can't animate on its own.
   late final AnimationController _controller;
   bool _isOpen = false;
 
-  static const double _revealFraction = 0.3; // "3/10 part swipe"
+  static const double _revealFraction = 0.3;
 
   @override
   void initState() {
@@ -99,8 +91,7 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
 
   void _handleDragUpdate(DragUpdateDetails details, double maxOffset) {
     final delta = details.primaryDelta ?? 0;
-    // Dragging left (negative delta) increases value toward 1 (open);
-    // dragging right decreases it back toward 0 (closed).
+
     final newValue = _controller.value - (delta / maxOffset);
     _controller.value = newValue.clamp(0.0, 1.0);
   }
@@ -118,8 +109,7 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
 
   void _delete(BuildContext context) {
     final reminder = widget.reminder;
-    // Soft delete — moves to Reminder History, exactly like Budget
-    // Planner and Savings Goals. "Temporary delete", as you put it.
+
     context.read<ReminderProvider>().hideReminder(reminder.id);
     _close();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -127,7 +117,8 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
         content: Text('"${reminder.title}" moved to history'),
         action: SnackBarAction(
           label: 'Undo',
-          onPressed: () => context.read<ReminderProvider>().unhideReminder(reminder.id),
+          onPressed: () =>
+              context.read<ReminderProvider>().unhideReminder(reminder.id),
         ),
       ),
     );
@@ -140,13 +131,11 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
         final maxOffset = constraints.maxWidth * _revealFraction;
 
         return GestureDetector(
-          onHorizontalDragUpdate: (details) => _handleDragUpdate(details, maxOffset),
+          onHorizontalDragUpdate: (details) =>
+              _handleDragUpdate(details, maxOffset),
           onHorizontalDragEnd: _handleDragEnd,
           child: Stack(
             children: [
-              // Red "Delete" panel underneath, sized to exactly the
-              // revealed 30% — this is what shows through as the card
-              // above slides left.
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.centerRight,
@@ -157,12 +146,15 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
                       borderRadius: BorderRadius.circular(14),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(14),
-                        // Only tappable once fully open — a half-open
-                        // sliver shouldn't be an accidental delete target.
                         onTap: _isOpen ? () => _delete(context) : null,
                         child: const Center(
-                          child: Text('Delete',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            'Delete',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -170,7 +162,6 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
                 ),
               ),
 
-              // The actual card, slid left by _controller.value * maxOffset.
               AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) => Transform.translate(
@@ -180,10 +171,6 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
                 child: Stack(
                   children: [
                     _ReminderCardContent(reminder: widget.reminder),
-                    // Only present while open — "press outside" (which,
-                    // for a swiped-open row, means anywhere on the card
-                    // itself) closes it instead of triggering the icon's
-                    // normal toggle-complete behavior underneath.
                     if (_isOpen)
                       Positioned.fill(
                         child: GestureDetector(
@@ -203,9 +190,6 @@ class _SwipeableReminderTileState extends State<_SwipeableReminderTile>
   }
 }
 
-/// Pulled out as its own widget so _SwipeableReminderTile's build()
-/// isn't one giant nested mess — this is purely presentational, no
-/// gesture logic of its own.
 class _ReminderCardContent extends StatelessWidget {
   final ReminderModel reminder;
   const _ReminderCardContent({required this.reminder});
@@ -214,19 +198,29 @@ class _ReminderCardContent extends StatelessWidget {
     if (reminder.isCompletedForCurrentPeriod) {
       return reminder.isRecurringMonthly ? 'Paid this month' : 'Done';
     }
-    final now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final now = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
     final due = reminder.nextDueDate;
     final dueDay = DateTime(due.year, due.month, due.day);
     final daysUntil = dueDay.difference(now).inDays;
 
     if (daysUntil == 0) return 'Due today';
-    if (daysUntil > 0) return 'Due in $daysUntil day${daysUntil == 1 ? '' : 's'}';
+    if (daysUntil > 0) {
+      return 'Due in $daysUntil day${daysUntil == 1 ? '' : 's'}';
+    }
     return 'Overdue by ${-daysUntil} day${-daysUntil == 1 ? '' : 's'}';
   }
 
   Color _statusColor() {
     if (reminder.isCompletedForCurrentPeriod) return const Color(0xFF1C6B47);
-    final now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final now = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
     final due = reminder.nextDueDate;
     final dueDay = DateTime(due.year, due.month, due.day);
     final daysUntil = dueDay.difference(now).inDays;
@@ -236,10 +230,10 @@ class _ReminderCardContent extends StatelessWidget {
   }
 
   Color _typeColor() => switch (reminder.type) {
-        ReminderType.bill => const Color(0xFFE57373),
-        ReminderType.emi => Colors.indigo,
-        ReminderType.task => const Color(0xFF1C6B47),
-      };
+    ReminderType.bill => const Color(0xFFE57373),
+    ReminderType.emi => Colors.indigo,
+    ReminderType.task => const Color(0xFF1C6B47),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -256,12 +250,14 @@ class _ReminderCardContent extends StatelessWidget {
         children: [
           InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: () => context.read<ReminderProvider>().toggleCompleted(reminder),
+            onTap: () =>
+                context.read<ReminderProvider>().toggleCompleted(reminder),
             child: Container(
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: (isCompleted ? const Color(0xFF1C6B47) : _typeColor()).withValues(alpha: 0.15),
+                color: (isCompleted ? const Color(0xFF1C6B47) : _typeColor())
+                    .withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -279,29 +275,43 @@ class _ReminderCardContent extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(reminder.title,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        reminder.title,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: _typeColor().withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         reminder.category,
-                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: _typeColor()),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: _typeColor(),
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Text(
                   [
-                    if (reminder.amount != null) '\$${reminder.amount!.toStringAsFixed(2)}',
+                    if (reminder.amount != null)
+                      '\$${reminder.amount!.toStringAsFixed(2)}',
                     _statusText(),
                   ].join(' · '),
-                  style: TextStyle(fontSize: 12, color: _statusColor(), fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: _statusColor(),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),

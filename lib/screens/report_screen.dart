@@ -11,7 +11,6 @@ class ReportProblemScreen extends StatefulWidget {
 class _ReportProblemScreenState extends State<ReportProblemScreen> {
   Color get primaryGreem => context.appColors.balanceCardBackground;
   static const Color primaryGreen = Color(0xFF187A52);
-  static const Color backgroundColor = Color(0xFFF5F6F8);
   static const Color textPrimary = Color(0xFF202624);
   static const Color textSecondary = Color(0xFF727A76);
   static const Color borderColor = Color(0xFFE7EBE9);

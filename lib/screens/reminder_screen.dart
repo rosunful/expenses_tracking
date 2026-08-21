@@ -4,8 +4,7 @@ import 'package:expense_tracking/providers/reminder_provider.dart';
 import 'package:expense_tracking/widgets/add_income_widgets/category_chip_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// Reuses the same category infrastructure as expense/income categories —
-// CategoryType.reminder is a third branch of the same system.
+
 import 'package:expense_tracking/models/category_model.dart';
 
 class AddReminderScreen extends StatefulWidget {
@@ -22,7 +21,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
 
   ReminderType _type = ReminderType.bill;
   String _selectedCategory = 'Other';
-  bool _isRecurringMonthly = true; // defaults to "every month", matches your original ask
+  bool _isRecurringMonthly = true; // defaults to "every month",
   DateTime? _oneOffDueDate;
 
   @override
@@ -54,13 +53,14 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     if (_isRecurringMonthly) {
       dayOfMonth = int.tryParse(_dayOfMonthController.text.trim());
       if (dayOfMonth == null || dayOfMonth < 1 || dayOfMonth > 31) {
-        context.read<NotifyingProvider>().showMessage("Enter a valid day of month (1–31)");
+        context.read<NotifyingProvider>().showMessage(
+          "Enter a valid day of month (1–31)",
+        );
 
         return;
       }
     } else if (_oneOffDueDate == null) {
-       context.read<NotifyingProvider>().showMessage("Pick a due date");
-      
+      context.read<NotifyingProvider>().showMessage("Pick a due date");
     }
 
     final reminder = ReminderModel(
@@ -88,7 +88,9 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 3),
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF1C6B47) : const Color(0xffE9EEEA),
+            color: isSelected
+                ? const Color(0xFF1C6B47)
+                : const Color(0xffE9EEEA),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
@@ -125,7 +127,10 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: const Text('New Reminder', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'New Reminder',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0,
       ),
       body: SafeArea(
@@ -137,7 +142,9 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
               TextField(
                 controller: _titleController,
                 autofocus: true,
-                decoration: fieldDecoration.copyWith(hintText: 'e.g. Pay electricity bill'),
+                decoration: fieldDecoration.copyWith(
+                  hintText: 'e.g. Pay electricity bill',
+                ),
               ),
               const SizedBox(height: 16),
               Row(
@@ -149,26 +156,24 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
               ),
               const SizedBox(height: 20),
 
-              // The category system already built for expense/income —
-              // reused as-is, just pointed at CategoryType.reminder.
-              // "+ New" here pushes ManageCategoriesScreen as a real
-              // screen (not a popup), same as you asked for.
               CategoryChipPicker(
                 type: CategoryType.reminder,
                 selectedCategory: _selectedCategory,
-                onSelected: (category) => setState(() => _selectedCategory = category),
+                onSelected: (category) =>
+                    setState(() => _selectedCategory = category),
               ),
               const SizedBox(height: 20),
 
-              // This switch is the actual feature you asked for earlier:
-              // choosing between "every month on this date" vs a
-              // one-time due date.
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Repeats every month', style: TextStyle(fontWeight: FontWeight.w600)),
+                title: const Text(
+                  'Repeats every month',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
                 value: _isRecurringMonthly,
                 activeThumbColor: const Color(0xFF1C6B47),
-                onChanged: (value) => setState(() => _isRecurringMonthly = value),
+                onChanged: (value) =>
+                    setState(() => _isRecurringMonthly = value),
               ),
 
               if (_isRecurringMonthly)
@@ -190,17 +195,26 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                         : '${_oneOffDueDate!.year}-${_oneOffDueDate!.month.toString().padLeft(2, '0')}-${_oneOffDueDate!.day.toString().padLeft(2, '0')}',
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
                     side: const BorderSide(color: Color(0xFFDCE5DF)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
 
               const SizedBox(height: 16),
               TextField(
                 controller: _amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: fieldDecoration.copyWith(labelText: 'Amount (optional)'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: fieldDecoration.copyWith(
+                  labelText: 'Amount (optional)',
+                ),
               ),
               const SizedBox(height: 32),
               SizedBox(
@@ -210,11 +224,16 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1C6B47),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                   child: const Text(
                     'Add Reminder',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

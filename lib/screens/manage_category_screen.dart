@@ -9,23 +9,26 @@ import 'package:expense_tracking/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
-
-  Future<String?> _pickCategoryIcon(BuildContext context, {String? currentKey}) {
+Future<String?> _pickCategoryIcon(BuildContext context, {String? currentKey}) {
   return showDialog<String>(
     context: context,
     builder: (dialogContext) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(dialogContext).size.height * 0.6),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(dialogContext).size.height * 0.6,
+          ),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Choose an icon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                const Text(
+                  'Choose an icon',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ),
                 const SizedBox(height: 14),
                 Flexible(
                   child: SingleChildScrollView(
@@ -33,28 +36,36 @@ import 'package:provider/provider.dart';
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: categoryIconLibrary.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                          ),
                       itemBuilder: (context, index) {
-                        final entry = categoryIconLibrary.entries.elementAt(index);
+                        final entry = categoryIconLibrary.entries.elementAt(
+                          index,
+                        );
                         final isSelected = entry.key == currentKey;
                         return InkWell(
                           borderRadius: BorderRadius.circular(30),
-                          onTap: () => Navigator.of(dialogContext).pop(entry.key),
+                          onTap: () =>
+                              Navigator.of(dialogContext).pop(entry.key),
                           child: Container(
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? const Color(0xFF1C6B47)
-                                  : const Color(0xFF1C6B47).withValues(alpha: 0.1),
+                                  : const Color(
+                                      0xFF1C6B47,
+                                    ).withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               entry.value,
                               size: 20,
-                              color: isSelected ? Colors.white : const Color(0xFF1C6B47),
+                              color: isSelected
+                                  ? Colors.white
+                                  : const Color(0xFF1C6B47),
                             ),
                           ),
                         );
@@ -71,9 +82,6 @@ import 'package:provider/provider.dart';
   );
 }
 
-
-
-
 class ManageCategoriesScreen extends StatefulWidget {
   final CategoryType type;
   const ManageCategoriesScreen({super.key, required this.type});
@@ -87,9 +95,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   final FocusNode _newCategoryFocusNode = FocusNode();
   bool _isAdding = false;
 
-
   //FOR ADDING CATEGORY
-    String _selectedIconKey = 'category';
+  String _selectedIconKey = 'category';
 
   @override
   void dispose() {
@@ -97,11 +104,6 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     _newCategoryFocusNode.dispose();
     super.dispose();
   }
-
-  /// A MaterialBanner instead of a SnackBar — this is what actually
-  /// makes the message appear at the TOP of the screen (right below the
-  /// AppBar) rather than the bottom. Auto-dismisses after 2 seconds, but
-  /// also offers a manual "OK" in case someone wants it gone sooner.
 
   void _throwMessageFromTop(String message, {bool isError = false}) {
     final overlay = Overlay.of(context);
@@ -135,7 +137,6 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                     color: isError
                         ? Colors.red
                         : context.appColors.balanceCardText,
-                        
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -165,13 +166,10 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     });
   }
 
-  ///ADDING CATEGORY IN THE SCREEN 
-  ///
   Future<void> _pickIconForNewCategory() async {
     final key = await _pickCategoryIcon(context, currentKey: _selectedIconKey);
     if (key != null) setState(() => _selectedIconKey = key);
   }
-
 
   Future<void> _addCategory() async {
     final name = _newCategoryController.text.trim();
@@ -195,25 +193,18 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
 
     _throwMessageFromTop('"$name" added');
     _newCategoryController.clear();
-    // Straight back to the field so the next category can be typed
-    // immediately, without tapping back into it — useful when adding
-    // several in a row.
+
     setState(() => _selectedIconKey = 'category'); // reset for the next one
     _newCategoryFocusNode.requestFocus();
   }
 
-
-    Future<void> _changeIcon(CategoryModel category) async {
+  Future<void> _changeIcon(CategoryModel category) async {
     final key = await _pickCategoryIcon(context, currentKey: category.iconKey);
     if (key == null || !mounted) return;
     await context.read<CategoryProvider>().updateCategoryIcon(category.id, key);
     if (mounted) _throwMessageFromTop('Icon updated');
   }
 
-  /// How many existing records already use this category — this is
-  /// what turns the delete warning from generic into actually useful.
-  /// Expense/income categories are checked against real transactions;
-  /// reminder categories against both active and archived reminders.
   int _usageCount(CategoryModel category) {
     switch (widget.type) {
       case CategoryType.expense:
@@ -245,10 +236,6 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     }
   }
 
-  /// Expense categories can also have a live Budget Planner entry tied
-  /// to them (BudgetModel.category is a plain string, not a live
-  /// reference) — worth calling out specifically since a budget silently
-  /// surviving under a deleted category's name could be confusing later.
   bool _hasActiveBudget(CategoryModel category) {
     if (widget.type != CategoryType.expense) return false;
     return context.read<BudgetProvider>().budgets.any(
@@ -377,8 +364,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
         ),
         elevation: 0,
       ),
-      // MaterialBanner renders here automatically, docked at the top of
-      // the Scaffold body just under the AppBar — no extra wiring needed.
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
@@ -398,12 +384,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Grid for built-ins — they're fixed, unchangeable,
-                    // and there's usually only a handful, so a compact
-                    // grid reads as "reference info" rather than a list
-                    // of things you can act on (which the custom ones
-                    // below actually are).
-                    GridView.builder(                      
+
+                    GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: defaults.length,
@@ -413,12 +395,11 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                             mainAxisSpacing: 0,
                             crossAxisSpacing: 8,
                             childAspectRatio: .90,
-
                           ),
                       itemBuilder: (context, index) =>
                           _DefaultCategoryTile(category: defaults[index]),
                     ),
-                    // const SizedBox(height: 0),
+
                     Text(
                       'YOUR CATEGORIES (${custom.length})',
                       style: TextStyle(
@@ -478,7 +459,11 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                         color: const Color(0xFF1C6B47).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Icon(iconFromKey(_selectedIconKey), size: 20, color: const Color(0xFF1C6B47)),
+                      child: Icon(
+                        iconFromKey(_selectedIconKey),
+                        size: 20,
+                        color: const Color(0xFF1C6B47),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -552,8 +537,6 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   }
 }
 
-/// Compact tile for a built-in category — icon on top, name below,
-/// centered. No edit/delete affordance since these can't be modified.
 class _DefaultCategoryTile extends StatelessWidget {
   final CategoryModel category;
   const _DefaultCategoryTile({required this.category});
@@ -570,13 +553,13 @@ class _DefaultCategoryTile extends StatelessWidget {
             color: const Color(0xFF1C6B47).withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-           child: Icon(resolveCategoryIcon(category), size: 20, color:  context.appColors.balanceCardBackground.withValues(alpha: 0.5)),
-  
-          // child: Icon(
-          //   iconForCategory(category.name),
-          //   size: 20,
-          //   color: context.appColors.balanceCardBackground,
-          // ),
+          child: Icon(
+            resolveCategoryIcon(category),
+            size: 20,
+            color: context.appColors.balanceCardBackground.withValues(
+              alpha: 0.5,
+            ),
+          ),
         ),
         const SizedBox(height: 6),
         Text(
@@ -591,8 +574,6 @@ class _DefaultCategoryTile extends StatelessWidget {
   }
 }
 
-/// Row card for a custom (user-added) category — this is the one that
-/// still needs Edit/Delete, since only custom categories allow either.
 class _CustomCategoryRow extends StatelessWidget {
   final CategoryModel category;
   final VoidCallback onRename;
@@ -603,7 +584,7 @@ class _CustomCategoryRow extends StatelessWidget {
     required this.category,
     required this.onRename,
     required this.onDelete,
-     required this.onChangeIcon,
+    required this.onChangeIcon,
   });
 
   @override
@@ -631,7 +612,7 @@ class _CustomCategoryRow extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Icon(
-             resolveCategoryIcon(category),
+            resolveCategoryIcon(category),
             // iconForCategory(category.name),
             size: 18,
             color: context.appColors.balanceCardBackground,

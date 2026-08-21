@@ -31,21 +31,10 @@ class _StartingOnboard extends State<StartingOnboard> {
     final authProvider = context.read<AuthProvider>();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      // value: const SystemUiOverlayStyle(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
         statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
-
-        //THE REASON I AM DOING THIS CAUSE THE SYS_NAV IS SHOWING FULL DARK
-        //WHICH LEADING TO NOTHING TO SEE
-        // statusBarColor: Colors.transparent,
-        // statusBarIconBrightness: Brightness.light,
-        // statusBarBrightness: Brightness.dark,
-
-        // systemNavigationBarColor: Color(0xFF0E1A14),
-        // systemNavigationBarIconBrightness: Brightness.light,
-        // systemNavigationBarDividerColor: Colors.transparent,
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -53,13 +42,9 @@ class _StartingOnboard extends State<StartingOnboard> {
           child: Padding(
             padding: const EdgeInsetsGeometry.fromLTRB(20, 10, 20, 60),
 
-            //THIS IS FOR THE WHOLE SCREEN CONTENT INSIDE
-            //THE ONBOARDING SCREEN LIKE
-            //SKIP + MIDDLE CONTENT + NEXT BUTTON AREA
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                //THIS IS OF THE SKIP - AND WE WILL CREATE THE SEPERATE CLASS AND PUT IN HERE
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -80,8 +65,6 @@ class _StartingOnboard extends State<StartingOnboard> {
                   ],
                 ),
 
-                //THIS IS THE MIDDLE PART WHERE WE SHOW THE ICONS AND TITLE AND SUB TITLE
-                //FOR THEM ALSO WE WILL CREATE THE CLASS AND CALL IN HERE
                 Expanded(
                   child: PageView(
                     controller: _control,
@@ -100,8 +83,6 @@ class _StartingOnboard extends State<StartingOnboard> {
                   ),
                 ),
 
-                //THIS IS FOR THE ANIMATION PAGE INDICATOR AND WE WILL CREATE THE CLASS AND
-                //CALL THEM HERE TOO
                 Padding(
                   padding: const EdgeInsetsGeometry.fromLTRB(0, 0, 0, 24),
                   child: SmoothPageIndicator(
@@ -110,19 +91,15 @@ class _StartingOnboard extends State<StartingOnboard> {
                     effect: ExpandingDotsEffect(
                       dotHeight: 8,
                       dotWidth: 8,
-                      expansionFactor:
-                          3, // increase for a longer pill (try 3–4)
+                      expansionFactor: 3,
                       spacing: 6, // gap between dots
-                      radius:
-                          16, // corner rounding — high value = fully pill-shaped
+                      radius: 16,
                       activeDotColor: const Color(0xFF3DDC97),
                       dotColor: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
 
-                //THIS IS THE BUTTON AREA HERE WILL CREATE THE CLASS AND
-                //CALL THEM HERE TO MAKE THE CODE READABLE
                 if (_currentPage == 0)
                   Row(
                     children: [

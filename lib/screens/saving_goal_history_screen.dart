@@ -7,7 +7,10 @@ import 'package:provider/provider.dart';
 class SavingsGoalHistoryScreen extends StatelessWidget {
   const SavingsGoalHistoryScreen({super.key});
 
-  Future<void> _confirmPermanentDelete(BuildContext context, SavingsGoalModel goal) async {
+  Future<void> _confirmPermanentDelete(
+    BuildContext context,
+    SavingsGoalModel goal,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -23,7 +26,10 @@ class SavingsGoalHistoryScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete Permanently', style: TextStyle(color: Colors.red)),
+            child: const Text(
+              'Delete Permanently',
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -71,22 +77,38 @@ class SavingsGoalHistoryScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(goal.title, style:  TextStyle(fontWeight: FontWeight.bold ,  color: Theme.of(context).colorScheme.onSurface)),
+                              Text(
+                                goal.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                              ),
                               Text(
                                 '\$${goal.savedAmount.toStringAsFixed(0)} of \$${goal.targetAmount.toStringAsFixed(0)} saved',
-                                style:  TextStyle(fontSize: 12, color: context.appColors.paragraphColor),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: context.appColors.paragraphColor,
+                                ),
                               ),
                             ],
                           ),
                         ),
                         TextButton(
-                          onPressed: () =>
-                              context.read<SavingsGoalProvider>().unhideGoal(goal.id),
+                          onPressed: () => context
+                              .read<SavingsGoalProvider>()
+                              .unhideGoal(goal.id),
                           child: const Icon(Icons.history),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete_forever, color: Colors.redAccent),
-                          onPressed: () => _confirmPermanentDelete(context, goal),
+                          icon: const Icon(
+                            Icons.delete_forever,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () =>
+                              _confirmPermanentDelete(context, goal),
                         ),
                       ],
                     ),

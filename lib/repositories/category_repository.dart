@@ -24,7 +24,7 @@ class CategoryRepository {
     await _categoriesRef.add({
       'name': name,
       'type': type.name,
-      if (iconKey != null) 'iconKey': iconKey,
+      'iconKey': ?iconKey,
     });
   }
 

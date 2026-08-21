@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 
-/// This is the "ViewModel" layer in MVVM. Your screens (login page,
-/// signup page, a wrapper that decides "show login or show home")
-/// listen to this class instead of talking to AuthService directly.
+
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
 

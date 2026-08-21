@@ -40,7 +40,7 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
     try {
       await context.read<CurrencyProvider>().setCurrency(currency);
       if (mounted) {
-        // Use pop with a small delay to ensure smooth transition
+        
         Future.delayed(const Duration(milliseconds: 100), () {
           if (mounted) Navigator.of(context).pop(currency);
         });
@@ -86,7 +86,7 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar - Matching the design theme
+            
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
               child: Container(
@@ -95,7 +95,7 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -189,8 +189,8 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10),
                               onTap: () => _select(currency),
-                              splashColor: const Color(0xFF1C6B47).withOpacity(0.1),
-                              highlightColor: const Color(0xFF1C6B47).withOpacity(0.05),
+                              splashColor: const Color(0xFF1C6B47).withValues(alpha: 0.1),
+                              highlightColor: const Color(0xFF1C6B47).withValues(alpha: 0.05),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,
@@ -338,108 +338,3 @@ class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
 
 
 
-
-
-
-// import 'package:expense_tracking/models/currency_model.dart';
-// import 'package:expense_tracking/repositories/currency_repository.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-
-// class CurrencySelectionScreen extends StatefulWidget {
-//   const CurrencySelectionScreen({super.key});
-
-//   @override
-//   State<CurrencySelectionScreen> createState() => _CurrencySelectionScreenState();
-// }
-
-// class _CurrencySelectionScreenState extends State<CurrencySelectionScreen> {
-//   final TextEditingController _searchController = TextEditingController();
-//   String _query = '';
-
-//   @override
-//   void dispose() {
-//     _searchController.dispose();
-//     super.dispose();
-//   }
-
-//   List<CurrencyModel> get _filtered {
-//     if (_query.trim().isEmpty) return supportedCurrencies;
-//     final q = _query.trim().toLowerCase();
-//     return supportedCurrencies
-//         .where((c) =>
-//             c.countryName.toLowerCase().contains(q) || c.code.toLowerCase().contains(q))
-//         .toList();
-//   }
-
-//   Future<void> _select(CurrencyModel currency) async {
-//     await context.read<CurrencyProvider>().setCurrency(currency);
-//     if (mounted) Navigator.of(context).pop();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final selectedCode = context.watch<CurrencyProvider>().selected.code;
-//     final results = _filtered;
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         leading: const BackButton(),
-//         title: const Text('Select Currency', style: TextStyle(fontWeight: FontWeight.bold)),
-//         elevation: 0,
-//       ),
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.all(16),
-//               child: TextField(
-//                 controller: _searchController,
-//                 onChanged: (value) => setState(() => _query = value),
-//                 decoration: InputDecoration(
-//                   hintText: 'Search country or currency code',
-//                   prefixIcon: const Icon(Icons.search),
-//                   filled: true,
-//                   fillColor: const Color(0xFFF1F5F2),
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(10),
-//                     borderSide: const BorderSide(color: Color(0xFFDCE5DF)),
-//                   ),
-//                   enabledBorder: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(10),
-//                     borderSide: const BorderSide(color: Color(0xFFDCE5DF)),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Expanded(
-//               child: results.isEmpty
-//                   ? const Center(
-//                       child: Text('No currencies match your search', style: TextStyle(color: Colors.black45)),
-//                     )
-//                   : ListView.separated(
-//                       itemCount: results.length,
-//                       separatorBuilder: (_, _) => const Divider(height: 1),
-//                       itemBuilder: (context, index) {
-//                         final currency = results[index];
-//                         final isSelected = currency.code == selectedCode;
-//                         return ListTile(
-//                           title: Text(currency.countryName),
-//                           subtitle: Text(currency.code),
-//                           trailing: isSelected
-//                               ? const Icon(Icons.check_circle, color: Color(0xFF1C6B47))
-//                               : Text(
-//                                   currency.symbol,
-//                                   style: const TextStyle(fontSize: 16, color: Colors.black54),
-//                                 ),
-//                           onTap: () => _select(currency),
-//                         );
-//                       },
-//                     ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

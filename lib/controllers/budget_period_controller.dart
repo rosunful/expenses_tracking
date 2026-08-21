@@ -1,4 +1,4 @@
-/// How often a budget's "spent" amount resets to zero.
+
 enum BudgetPeriod { weekly, monthly, yearly }
 
 extension BudgetPeriodLabel on BudgetPeriod {
@@ -25,7 +25,7 @@ DateTime periodStartFor(BudgetPeriod period) {
 
   switch (period) {
     case BudgetPeriod.weekly:
-      // Calendar week starting Monday. DateTime.weekday is 1=Mon..7=Sun.
+      
       final daysSinceMonday = now.weekday - 1;
       return DateTime(now.year, now.month, now.day)
           .subtract(Duration(days: daysSinceMonday));

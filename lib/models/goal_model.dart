@@ -1,15 +1,13 @@
 
-/// Matches the two goal types shown on your Home screen:
-/// "Budget · Food & Dining" and "Emergency Fund goal".
 enum GoalType { budget, emergencyFund }
 
 class GoalModel {
   final String id;
-  final String title; // e.g. "Food & Dining" or "Emergency Fund"
+  final String title;
   final GoalType type;
-  final double targetAmount; // e.g. 500 for the $340/$500 budget bar
-  final double currentAmount; // e.g. 340, or 3100 for the emergency fund
-  final String? category; // only used when type == budget, e.g. "Food"
+  final double targetAmount; 
+  final double currentAmount; 
+  final String? category; 
 
   GoalModel({
     required this.id,
@@ -20,8 +18,7 @@ class GoalModel {
     this.category,
   });
 
-  /// Handy getter — this is exactly what your progress bars need,
-  /// e.g. 340 / 500 = 0.68, or the 42% shown for the emergency fund.
+  /// e.g. 340 / 500 = 0.68, or the 42% shown for the emergency fund. (progress bars)
   double get progress =>
       targetAmount == 0 ? 0 : (currentAmount / targetAmount).clamp(0, 1);
 
