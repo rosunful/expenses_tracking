@@ -71,36 +71,37 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(Icons.arrow_back),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      goal.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.arrow_back),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        goal.title,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18 , color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Text(
-                '$symbol${goal.savedAmount.toStringAsFixed(0)} of $symbol${goal.targetAmount.toStringAsFixed(0)} saved',
-                style: const TextStyle(color: Colors.black54),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: Text(
+                  '$symbol${goal.savedAmount.toStringAsFixed(0)} of $symbol${goal.targetAmount.toStringAsFixed(0)} saved',
+                  style: const TextStyle(color: Colors.black54),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
                     AmountDisplay(amount: amount),
@@ -128,8 +129,8 @@ class _AddGoalContributionScreenState extends State<AddGoalContributionScreen> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

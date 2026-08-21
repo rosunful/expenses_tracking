@@ -7,8 +7,6 @@ import 'package:expense_tracking/widgets/home_widgets/currency_foramatter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-/// "Due today" / "Due tomorrow" / "Due in 3d" / "Overdue by 2d" — short
-/// enough to sit on one line next to the amount.
 String _dueLabel(DateTime due) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
@@ -41,9 +39,6 @@ class BillsReminderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ReminderProvider.reminders is already visible-only and sorted
-    // soonest-due-first, so we just need to drop anything already
-    // handled for this period.
     final upcoming = context
         .watch<ReminderProvider>()
         .reminders
@@ -188,10 +183,7 @@ class _ReminderRow extends StatelessWidget {
         const SizedBox(width: 8),
         if (reminder.amount != null)
           Text(
-             formatCurrency(
-      reminder.amount!,
-      symbol: symbol,
-    ),
+            formatCurrency(reminder.amount!, symbol: symbol),
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.green,

@@ -40,25 +40,33 @@ class SavingsGoalsScreen extends StatelessWidget {
                 const SizedBox(height: 12),
               ],
               const SizedBox(height: 4),
-              OutlinedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const GoalFormScreen()),
-                ),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(color: Colors.grey.shade400, style: BorderStyle.solid),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                child: const Text(
-                  '+ New goal',
-                  style: TextStyle(color: Color(0xFF1C6B47), fontWeight: FontWeight.bold),
-                ),
-              ),
+              // OutlinedButton(
+              //   onPressed: () => Navigator.of(context).push(
+              //     MaterialPageRoute(builder: (_) => const GoalFormScreen()),
+              //   ),
+              //   style: OutlinedButton.styleFrom(
+              //     padding: const EdgeInsets.symmetric(vertical: 16),
+              //     side: BorderSide(color: Colors.grey.shade400, style: BorderStyle.solid),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(14),
+              //     ),
+              //   ),
+              //   child: const Text(
+              //     '+ New goal',
+              //     style: TextStyle(color: Color(0xFF1C6B47), fontWeight: FontWeight.bold),
+              //   ),
+              // ),
+          
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF1C6B47),
+          onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const GoalFormScreen()), 
+          ),
+       child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -113,7 +121,8 @@ class _GoalCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(goal.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                        Text(goal.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15 , color: Theme.of(context).colorScheme.onSurface),
+                        maxLines: 1,),
                         Text(
                           '$symbol${goal.savedAmount.toStringAsFixed(0)} of $symbol${goal.targetAmount.toStringAsFixed(0)} saved',
                           style: const TextStyle(fontSize: 12, color: Colors.black54),
@@ -199,8 +208,6 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
     if (mounted) Navigator.of(context).pop();
   }
 
-  /// Soft delete — moves this goal to Goal History rather than erasing
-  /// it, same as Budget Planner's Delete button.
   Future<void> _hide() async {
     if (widget.existing == null) return;
     await context.read<SavingsGoalProvider>().hideGoal(widget.existing!.id);
